@@ -66,8 +66,18 @@ public class SetInitModeCommand implements Command {
             return new CommandResult(CommandResultType.FAILURE, String.format(SEED_OUT_OF_BOUNCE_FORMAT, newSeed));
         }
 
-        String oldState = model.getInitMode() + SPACE + model.getSeed();
-        String newState = newMode + SPACE + newSeed;
+        String oldState;
+        String newState;
+        if (model.getInitMode().equals(InitMode.INIT_MODE_RANDOM)) {
+            oldState = model.getInitMode() + SPACE + model.getSeed();
+        } else {
+            oldState = model.getInitMode().toString();
+        }
+        if (newMode.equals(InitMode.INIT_MODE_RANDOM)) {
+            newState = newMode + SPACE + newSeed;
+        } else {
+            newState = newMode.toString();
+        }
         if (model.getInitMode() == InitMode.INIT_MODE_STOP && newMode == InitMode.INIT_MODE_STOP) {
             return new CommandResult(CommandResultType.SUCCESS, INIT_MODE_DID_NOT_CHANGE_MESSAGE);
         } else if (model.getInitMode() == InitMode.INIT_MODE_STOP) {
