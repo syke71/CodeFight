@@ -26,7 +26,7 @@ public class ShowAiCommand implements Command {
     private static final String RUNNING_MESSAGE = "RUNNING";
     private static final String STOPPED_MESSAGE = "STOPPED";
     private static final String STATUS_FORMAT = "%s (%s@%s)";
-    private static final String NEXT_ACTION_FORMAT = "Next Command: %s @ %s";
+    private static final String NEXT_ACTION_FORMAT = "Next Command: %s @%s";
     private static final String GAME_STORAGE_CELL_FORMAT = "%s|%s|%s";
     private static final String BREAK_LINE = "\n";
     private static final String UNKNOWN_AI_NAME = "The entered AI does not exist!";
