@@ -33,7 +33,7 @@ public class SetInitModeCommand implements Command {
     private static final String WRONG_SEED_TYPE_MESSAGE = "the entered seed should be a number!";
     private static final String SEED_OUT_OF_BOUNCE_FORMAT = "the entered seed is out bounce for '%s'!";
     private static final String INIT_MODE_DID_NOT_CHANGE_MESSAGE = "";
-    private static final String SUCCESSFUL_MODE_CHANGE_FORMAT = "Changed init mode from '%s' to '%s'";
+    private static final String SUCCESSFUL_MODE_CHANGE_FORMAT = "Changed init mode from %s to %s";
     private static final String SPACE = " ";
     private static final String COMMON_ERROR_MESSAGE = "Unexpected error in SetInitModeCommand.java";
 
