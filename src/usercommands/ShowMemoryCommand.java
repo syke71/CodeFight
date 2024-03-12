@@ -290,12 +290,9 @@ public class ShowMemoryCommand implements Command {
         }
         StringBuilder message = new StringBuilder();
         if (model.getGameStorage().getSize() > STANDARD_DISPLAY_SIZE) {
-            message.append(String.join("", ArrayUtil.copyOfRangeCircularArray(simpleView, 0, displayPosition)))
-                .append(model.getGeneralAiSymbols()[SHOW_STORAGE_SYMBOL_INDEX])
-                .append(String.join("", cutSimpleView))
-                .append(model.getGeneralAiSymbols()[SHOW_STORAGE_SYMBOL_INDEX])
-                .append(String.join("",
-                    ArrayUtil.copyOfRangeCircularArray(simpleView, displayPosition + STANDARD_DISPLAY_SIZE, simpleView.length)));
+            message.append(String.join("",simpleView))
+                .insert(displayPosition, SHOW_STORAGE_SYMBOL_INDEX)
+                .insert((displayPosition + STANDARD_DISPLAY_SIZE) % storage.getSize(), SHOW_STORAGE_SYMBOL_INDEX);
         } else {
             message.append(Arrays.toString(cutSimpleView));
         }
