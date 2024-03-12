@@ -5,6 +5,8 @@ import model.Ai;
 import model.GameStorageCell;
 import model.GameSystem;
 
+import static model.Constants.BETWEEN_NAME_AND_ID_PLACEHOLDER;
+
 /**
  * Represents an AI command to add two values.
  * <p>
@@ -24,7 +26,8 @@ public class AddCommand implements AiCommand {
         int result = cell.getEntryA() + cell.getEntryB();
         model.getGameStorage().getCells().get(index).setEntryB(result);
 
-        model.getGameStorage().getCells().get(index).postInitChangedBy(executingAi.getName());
+        String name = executingAi.getName() + BETWEEN_NAME_AND_ID_PLACEHOLDER + executingAi.getId();
+        model.getGameStorage().getCells().get(index).postInitChangedBy(name);
         executingAi.updatePointerIndex();
     }
 }
