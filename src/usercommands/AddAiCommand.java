@@ -3,10 +3,9 @@ package usercommands;
 import model.Ai;
 import model.GameSystem;
 
-import java.util.regex.Pattern;
-
 import static model.ConstantErrorMessages.REQUIRES_GAME_STOPPED_MESSAGE;
-import static model.Constants.INTEGER_REGEX;
+import static model.Constants.AMOUNT_OF_ARGUMENTS_PER_AI;
+import static model.Constants.MINIMUM_NUMBER_OF_AIS_PER_GAME;
 
 /**
  * A command to add an AI to the game.
@@ -17,9 +16,7 @@ public class AddAiCommand implements Command {
 
     private static final int AI_NAME_INDEX = 0;
     private static final int AI_ARGUMENTS_INDEX = 1;
-    private static final int MINIMUM_NUMBER_OF_AIS_PER_GAME = 2;
     private static final int NUMBER_OF_ARGUMENTS = 2;
-    private static final int AMOUNT_OF_ARGUMENTS_PER_AI = 3;
     private static final int COMMAND_NAME_INDEX = 0;
     private static final int ENTRY_A_INDEX = 1;
     private static final int ENTRY_B_INDEX = 2;
@@ -123,7 +120,9 @@ public class AddAiCommand implements Command {
                     }
                 }
                 case ENTRY_A_INDEX, ENTRY_B_INDEX -> {
-                    if (!Pattern.matches(INTEGER_REGEX, arguments[i])) {
+                    try {
+                        Integer.parseInt(arguments[i]);
+                    } catch (NumberFormatException e) {
                         return false;
                     }
                 }

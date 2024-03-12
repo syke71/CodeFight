@@ -3,10 +3,7 @@ package usercommands;
 import model.GameSystem;
 import model.InitMode;
 
-import java.util.regex.Pattern;
-
 import static model.ConstantErrorMessages.REQUIRES_GAME_STOPPED_MESSAGE;
-import static model.Constants.INTEGER_REGEX;
 import static model.Constants.SET_INIT_MODE_COMMAND_NAME;
 import static model.Constants.WRONG_ARGUMENTS_COUNT_FORMAT;
 
@@ -84,7 +81,7 @@ public class SetInitModeCommand implements Command {
         } else {
             newState = newMode.toString();
         }
-        if (model.getInitMode() == InitMode.INIT_MODE_STOP && newMode == InitMode.INIT_MODE_STOP) {
+        if (oldState.equals(newState)) {
             return new CommandResult(CommandResultType.SUCCESS, INIT_MODE_DID_NOT_CHANGE_MESSAGE);
         } else if (model.getInitMode() == InitMode.INIT_MODE_STOP) {
             model.setInitMode(newMode);
@@ -152,16 +149,14 @@ public class SetInitModeCommand implements Command {
         return true;
     }
 
-    private boolean checkIfSeedIsInteger(String seedString) {
-        return Pattern.matches(INTEGER_REGEX, seedString);
-    }
-
     private int parseSeed(String seedString) {
+        int seed;
         try {
-            return Integer.parseInt(seedString);
+            seed = Integer.parseInt(seedString);
         } catch (NumberFormatException e) {
             return Integer.MIN_VALUE;
         }
+        return seed;
     }
 
     private boolean checkSeedInBounds(int seed) {

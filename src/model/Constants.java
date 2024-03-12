@@ -140,10 +140,14 @@ public final class Constants {
     public static final String BETWEEN_NAME_AND_ID_PLACEHOLDER = "#";
 
     /**
-     * Regex used to identify whether a String input can be parsed to an Integer or not.
+     * Amount of arguments each AI may have.
      */
-    public static final String INTEGER_REGEX = "-?[0-9]+";
+    public static final int AMOUNT_OF_ARGUMENTS_PER_AI = 3;
 
+    /**
+     * Minimum amount of AIs necessary to start a game.
+     */
+    public static final int MINIMUM_NUMBER_OF_AIS_PER_GAME = 2;
 
     private Constants() {
     }

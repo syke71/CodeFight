@@ -71,6 +71,7 @@ public class GameSystem {
         this.gameStarted = false;
         this.seed = STANDARD_SEED;
         this.initMode = STANDARD_INIT_MODE;
+        this.formatGameStorage();
     }
 
     /**

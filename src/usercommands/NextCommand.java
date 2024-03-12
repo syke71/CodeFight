@@ -4,11 +4,10 @@ import model.Ai;
 import model.GameSystem;
 
 import java.util.ArrayList;
-import java.util.regex.Pattern;
 
 import static model.ConstantErrorMessages.REQUIRES_GAME_RUNNING_MESSAGE;
 import static model.Constants.BETWEEN_NAME_AND_ID_PLACEHOLDER;
-import static model.Constants.INTEGER_REGEX;
+import static model.Constants.STOP_COMMAND_NAME;
 
 /**
  * Represents a command to manually cycle through the game loop.
@@ -54,6 +53,11 @@ public class NextCommand implements Command {
         while (!model.getAliveAis().isEmpty() && step != stepAmount) {
             // fetch currently active AI
             currentAi = model.getAliveAis().pollFirst();
+            if (currentAi.getRoundCounter() == 0) {
+                while (model.getGameStorage().getCells().get(currentAi.getPointerIndex()).getCommand().equals(STOP_COMMAND_NAME)) {
+                    currentAi.updatePointerIndex();
+                }
+            }
             model.getAiCommandHandler().execute(currentAi);
 
             // check if executed command was a 'STOP' command
@@ -105,7 +109,12 @@ public class NextCommand implements Command {
     }
 
     private boolean checkValidInputType(String[] commandArguments) {
-        return Pattern.matches(INTEGER_REGEX, commandArguments[ARGUMENT_INDEX]);
+        try {
+            Integer.parseInt(commandArguments[ARGUMENT_INDEX]);
+        } catch (NumberFormatException e) {
+            return false;
+        }
+        return true;
     }
 
     private boolean checkEmptyArgument(String[] commandArguments) {

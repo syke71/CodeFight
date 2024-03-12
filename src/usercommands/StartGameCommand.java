@@ -1,12 +1,14 @@
 package usercommands;
 
-import model.Ai;
+import model.GameStorage;
+import model.GameStorageCell;
 import model.GameSystem;
 
 import java.util.Arrays;
 
 import static model.ConstantErrorMessages.REQUIRES_GAME_STOPPED_MESSAGE;
 import static model.Constants.START_GAME_COMMAND_NAME;
+import static model.Constants.STOP_COMMAND_NAME;
 import static model.Constants.WRONG_ARGUMENTS_COUNT_FORMAT;
 
 /**
@@ -23,7 +25,9 @@ public class StartGameCommand implements Command {
     private static final String DESCRIPTION_MESSAGE = "With it, you can start a new game using at least %s previously added AIs.";
     private static final String DESCRIPTION_FORMAT = "%s: %s %s";
     private static final String UNKNOWN_AI_MESSAGE = "the entered AI names could not be found!";
-    private static final String INVALID_AI_ARGUMENT_LENGTH = "the entered AIs have more parameters to load than the storages size!";
+    private static final String INVALID_AI_ARGUMENT_LENGTH_FORMAT =
+        "given the current settings, the entered AI '%s' has more parameters to load than the storage size allows!";
+    private static final String GAME_REQUIRES_NON_STOP_COMMAND = "the game requires at least one not-STOP command to start!";
     private static final String GAME_STARTED_MESSAGE = "Game started.";
 
     /**
@@ -44,14 +48,17 @@ public class StartGameCommand implements Command {
         if (!checkIfAisExist(model, commandArguments)) {
             return new CommandResult(CommandResultType.FAILURE, UNKNOWN_AI_MESSAGE);
         }
-        if (!checkAiArgumentLength(model, commandArguments)) {
-            return new CommandResult(CommandResultType.FAILURE, INVALID_AI_ARGUMENT_LENGTH);
+        String invalidAi = checkValidAiArgumentLength(model, commandArguments);
+        if (invalidAi != null) {
+            return new CommandResult(CommandResultType.FAILURE, String.format(INVALID_AI_ARGUMENT_LENGTH_FORMAT, invalidAi));
         }
 
-
         String[] aiList = Arrays.copyOf(commandArguments, commandArguments.length);
-
         model.startGame(aiList);
+        if (checkIfGameHasOnlyStopCommands(model)) {
+            model.resetGame();
+            return new CommandResult(CommandResultType.FAILURE, GAME_REQUIRES_NON_STOP_COMMAND);
+        }
         return new CommandResult(CommandResultType.SUCCESS, GAME_STARTED_MESSAGE);
     }
 
@@ -91,21 +98,40 @@ public class StartGameCommand implements Command {
         return commandArguments.length >= LEAST_NUMBER_OF_ARGUMENTS && commandArguments.length <= model.getMaxAmountOfAis();
     }
 
-    private boolean checkAiArgumentLength(GameSystem model, String[] commandArguments) {
-        int storageSize = model.getGameStorage().getSize();
-        int numberOfAis = commandArguments.length;
-        int allowableSpace = storageSize / numberOfAis;
-        for (Ai ai : model.getInGameAis()) {
-            if (ai.getArguments().size() > allowableSpace) {
+    private boolean checkIfAisExist(GameSystem model, String[] commandArguments) {
+        for (String s : commandArguments) {
+            if (!model.getAiMap().containsKey(s)) {
                 return false;
             }
         }
         return true;
     }
 
-    private boolean checkIfAisExist(GameSystem model, String[] commandArguments) {
-        for (String s : commandArguments) {
-            if (!model.getAiMap().containsKey(s)) {
+    private String checkValidAiArgumentLength(GameSystem model, String[] commandArguments) {
+        int storageSize = model.getGameStorage().getSize();
+        int numberOfAis = commandArguments.length;
+        int currentPosition;
+        int nextPosition;
+        int availableSpace;
+
+        for (int i = 0; i < commandArguments.length; i++) {
+            currentPosition = (storageSize / numberOfAis) * i;
+            nextPosition = (storageSize / numberOfAis) * (i + 1);
+            availableSpace = nextPosition - currentPosition;
+            if (i == commandArguments.length - 1) {
+                availableSpace = storageSize - currentPosition;
+            }
+            if (model.getAiMap().get(commandArguments[i]).getArguments().size() > availableSpace) {
+                return commandArguments[i];
+            }
+        }
+        return null;
+    }
+
+    private boolean checkIfGameHasOnlyStopCommands(GameSystem model) {
+        GameStorage storage = model.getGameStorage();
+        for (GameStorageCell cell : storage.getCells()) {
+            if (!cell.getCommand().equals(STOP_COMMAND_NAME)) {
                 return false;
             }
         }
