@@ -149,6 +149,11 @@ public final class Constants {
      */
     public static final int MINIMUM_NUMBER_OF_AIS_PER_GAME = 2;
 
+    /**
+     * A String used to append a line break.
+     */
+    public static final String NEXT_LINE = "\n";
+
     private Constants() {
     }
 }

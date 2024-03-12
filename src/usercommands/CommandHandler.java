@@ -15,6 +15,7 @@ import static model.Constants.END_GAME_COMMAND_NAME;
 import static model.Constants.ERROR_PREFIX;
 import static model.Constants.HELP_COMMAND_NAME;
 import static model.Constants.NEXT_COMMAND_NAME;
+import static model.Constants.NEXT_LINE;
 import static model.Constants.QUIT_COMMAND_NAME;
 import static model.Constants.REMOVE_AI_COMMAND_NAME;
 import static model.Constants.SET_INIT_MODE_COMMAND_NAME;
@@ -35,6 +36,7 @@ public class CommandHandler {
     private static final String COMMAND_NOT_FOUND_FORMAT = "command '%s' not found!";
     private static final String GAME_MUST_BE_RUNNING_FORMAT = "the game must be running to use the command '%s'!";
     private static final String GAME_MUST_BE_STOPPED_FORMAT = "the game must be stopped to use the command '%s'!";
+    private static final String UNEXPECTED_VALUE_MESSAGE = "Unexpected value: ";
     private final GameSystem gameSystem;
     private final Map<String, Command> commands;
     private final ArrayList<String> commandsList;
@@ -82,16 +84,16 @@ public class CommandHandler {
 
     private void executeCommand(String commandName, String[] commandArguments) {
         if (!commands.containsKey(commandName)) {
-            System.err.printf(ERROR_PREFIX + COMMAND_NOT_FOUND_FORMAT + "%n", commandName);
+            System.err.printf(ERROR_PREFIX + COMMAND_NOT_FOUND_FORMAT + NEXT_LINE, commandName);
         } else if (commands.get(commandName).getNumberOfArguments() != commandArguments.length
             && commands.get(commandName).getNumberOfArguments() != -1) {
-            System.err.printf(ERROR_PREFIX + WRONG_ARGUMENTS_COUNT_FORMAT + "%n", commandName);
+            System.err.printf(ERROR_PREFIX + WRONG_ARGUMENTS_COUNT_FORMAT + NEXT_LINE, commandName);
         } else if (!(commandName.equals(HELP_COMMAND_NAME) || commandName.equals(QUIT_COMMAND_NAME))
             && !doRunRequirementsMatch(commandName)) {
             if (gameSystem.getGameStatus()) {
-                System.err.printf(ERROR_PREFIX + GAME_MUST_BE_STOPPED_FORMAT + "%n", commandName);
+                System.err.printf(ERROR_PREFIX + GAME_MUST_BE_STOPPED_FORMAT + NEXT_LINE, commandName);
             } else {
-                System.err.printf(ERROR_PREFIX + GAME_MUST_BE_RUNNING_FORMAT + "%n", commandName);
+                System.err.printf(ERROR_PREFIX + GAME_MUST_BE_RUNNING_FORMAT + NEXT_LINE, commandName);
             }
         } else {
             CommandResult result = commands.get(commandName).execute(gameSystem, commandArguments);
@@ -103,7 +105,7 @@ public class CommandHandler {
                 switch (result.getType()) {
                     case SUCCESS -> System.out.println(output);
                     case FAILURE -> System.err.println(output);
-                    default -> throw new IllegalStateException("Unexpected value: " + result.getType());
+                    default -> throw new IllegalStateException(UNEXPECTED_VALUE_MESSAGE + result.getType());
                 }
             }
         }
