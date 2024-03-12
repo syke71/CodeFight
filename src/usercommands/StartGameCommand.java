@@ -60,7 +60,7 @@ public class StartGameCommand implements Command {
             model.resetGame();
             return new CommandResult(CommandResultType.FAILURE, GAME_REQUIRES_NON_STOP_COMMAND);
         }
-
+        this.adjustPointer(model);
         return new CommandResult(CommandResultType.SUCCESS, GAME_STARTED_MESSAGE);
     }
 
