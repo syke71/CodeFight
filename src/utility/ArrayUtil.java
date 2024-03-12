@@ -20,16 +20,14 @@ public final class ArrayUtil {
      * @param source the source array
      * @param from the initial index of the range to be copied, inclusive
      * @param to the final index of the range to be copied, exclusive
-     * @param <E> the type of elements in the array
-     * @return a new array containing the specified range of elements from the source array
+     * @return a new String array containing the specified range of elements from the source array
      */
-    public static <E> E[] copyOfRangeCircularArray(E[] source, int from, int to) {
+    public static String[] copyOfRangeCircularArray(String[] source, int from, int to) {
         int newLength = Math.abs(to - from);
-        E[] output = (E[]) java.lang.reflect.Array.newInstance(source.getClass().getComponentType(), newLength);
+        String[] output = new String[newLength];
         for (int i = 0; i < newLength; i++) {
             output[i] = source[(from + i) % source.length];
         }
         return output;
     }
 }
-
