@@ -7,7 +7,6 @@ import model.GameSystem;
 import utility.ArrayUtil;
 import utility.CircularArrayList;
 
-import java.util.Arrays;
 import java.util.LinkedList;
 
 import static model.ConstantErrorMessages.REQUIRES_GAME_RUNNING_MESSAGE;
@@ -290,19 +289,19 @@ public class ShowMemoryCommand implements Command {
                 memoryTable2D[j][i] = memoryTable2D[j][i].formatted(entry);
             }
         }
+        return insertShowStorageSymbol(model, simpleView, displayPosition)
+            + LINE_BREAK
+            + createDetailedMemory(memoryTable2D);
+    }
+
+    private String insertShowStorageSymbol(GameSystem model, String[] simpleView, int displayPosition) {
         LinkedList<String> message = new LinkedList<>();
-        if (model.getGameStorage().getSize() > STANDARD_DISPLAY_SIZE) {
-            message.addAll(Arrays.asList(simpleView));
-            int offset = displayPosition;
-            message.add(offset, model.getGeneralAiSymbols()[SHOW_STORAGE_SYMBOL_INDEX]);
-            offset += STANDARD_DISPLAY_SIZE + 1;
-            offset = offset % storage.getSize();
-            message.add(offset, model.getGeneralAiSymbols()[SHOW_STORAGE_SYMBOL_INDEX]);
-        } else {
-            message.add(Arrays.toString(cutSimpleView));
+        for (int i = 0; i < simpleView.length; i++) {
+            if (i == displayPosition || i == displayPosition + STANDARD_DISPLAY_SIZE) {
+                message.add(model.getGeneralAiSymbols()[SHOW_STORAGE_SYMBOL_INDEX]);
+            }
+            message.add(simpleView[i]);
         }
-        message.add(LINE_BREAK);
-        message.add(createDetailedMemory(memoryTable2D));
         return String.join("", message);
     }
 
