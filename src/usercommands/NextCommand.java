@@ -7,6 +7,7 @@ import java.util.ArrayList;
 
 import static model.ConstantErrorMessages.REQUIRES_GAME_RUNNING_MESSAGE;
 import static model.Constants.BETWEEN_NAME_AND_ID_PLACEHOLDER;
+import static model.Constants.NEXT_LINE;
 import static model.Constants.STOP_COMMAND_NAME;
 
 /**
@@ -27,6 +28,7 @@ public class NextCommand implements Command {
     private static final String WRONG_ARGUMENT_AMOUNT_MESSAGE = "please only enter one number or leave the argument blank!";
     private static final String AI_STOPPED_AFTER_X_STEPS_FORMAT = "%s executed %s steps until stopping.";
     private static final String EMPTY_MESSAGE = null;
+    private static final int MAX_DURATION = 100;
 
     /**
      * Executes the command to cycle through the game loop.
@@ -51,7 +53,12 @@ public class NextCommand implements Command {
         Ai currentAi;
         ArrayList<Ai> newAiDropOuts = new ArrayList<>();
         int step = 0;
+        long startTime = System.currentTimeMillis();
         while (!model.getAliveAis().isEmpty() && step != stepAmount) {
+            if (System.currentTimeMillis() - startTime > MAX_DURATION) {
+                break;
+            }
+
             // fetch currently active AI
             currentAi = model.getAliveAis().pollFirst();
             if (currentAi.getRoundCounter() == 0) {
@@ -137,7 +144,7 @@ public class NextCommand implements Command {
             }
             stringBuilder.append(AI_STOPPED_AFTER_X_STEPS_FORMAT.formatted(name, stepCounter));
             if (i++ != newAiDropOuts.size() - 1) {
-                stringBuilder.append("\n");
+                stringBuilder.append(NEXT_LINE);
             }
         }
         if (model.getInGameAis().isEmpty()) {

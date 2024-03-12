@@ -52,6 +52,7 @@ public class ShowMemoryCommand implements Command {
     private static final int ENTRY_B_COLUMN_INDEX = 6;
     private static final String LINE_BREAK = "\n";
     private static final String COLUMN_PARTITION = " ";
+    private static final String PADDING_FORMAT = "%%%ds";
 
     private static final String WRONG_ARGUMENT_AMOUNT_MESSAGE = "please only enter one number or leave the argument blank!";
     private static final String WRONG_ARGUMENT_TYPE_FORMAT = "only numbers are allowed for the command '%s'!";
@@ -271,7 +272,7 @@ public class ShowMemoryCommand implements Command {
             }
             // Prepare padding for each column
             for (int j = 0; j < rowAmount; j++) {
-                memoryTable2D[j][i] = "%" + longestEntryPerColumn[i] + "s";
+                memoryTable2D[j][i] = String.format(PADDING_FORMAT, longestEntryPerColumn[i]);
             }
             // Insert Table content
             for (int j = 0; j < rowAmount; j++) {
