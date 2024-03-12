@@ -3,6 +3,8 @@ package view;
 import model.GameSystem;
 
 import java.util.Arrays;
+import java.util.HashSet;
+import java.util.Set;
 
 import static model.Constants.ERROR_PREFIX;
 
@@ -61,7 +63,7 @@ public final class CodeFight {
         if (args.length < MIN_AMOUNT_OF_ARGUMENTS) {
             return false;
         }
-        // Make sure args.length is not even
+        // args.length may never be even
         if (args.length % 2 == 0) {
             return false;
         }
@@ -72,6 +74,24 @@ public final class CodeFight {
         } catch (NumberFormatException e) {
             return false;
         }
+        if (!areAllStringsUnique(args)) {
+            return false;
+        }
         return storageSize >= MIN_STORAGE_SIZE && storageSize <= MAX_STORAGE_SIZE;
+    }
+
+
+    public static boolean areAllStringsUnique(String[] array) {
+
+        Set<String> seenStrings = new HashSet<>();
+
+        for (String str : array) {
+            if (seenStrings.contains(str)) {
+                return false;
+            }
+            seenStrings.add(str);
+        }
+
+        return true;
     }
 }

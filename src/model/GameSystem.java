@@ -173,7 +173,6 @@ public class GameSystem {
         this.toggleGameStatus();
         this.clearInGameAis();
         this.gameStorage = new GameStorage(this.gameStorage.getSize());
-        this.setInitMode(STANDARD_INIT_MODE);
         this.formatGameStorage();
     }
 

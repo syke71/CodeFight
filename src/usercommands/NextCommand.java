@@ -22,6 +22,7 @@ public class NextCommand implements Command {
     private static final String DESCRIPTION_MESSAGE = "'%s' is used to manually cycle through the games loop.";
     private static final String DESCRIPTION_FORMAT = "%s: %s %s";
     private static final int ARGUMENT_INDEX = 0;
+    private static final int STANDARD_STEP_AMOUNT = 1;
     private static final String WRONG_ARGUMENT_FORMAT_MESSAGE = "the entered argument should be a number or empty!";
     private static final String WRONG_ARGUMENT_AMOUNT_MESSAGE = "please only enter one number or leave the argument blank!";
     private static final String AI_STOPPED_AFTER_X_STEPS_FORMAT = "%s executed %s steps until stopping.";
@@ -36,7 +37,7 @@ public class NextCommand implements Command {
      */
     @Override
     public CommandResult execute(GameSystem model, String[] commandArguments) {
-        int stepAmount = 0;
+        int stepAmount = STANDARD_STEP_AMOUNT;
         if (!checkEmptyArgument(commandArguments)) {
             if (!checkValidInputLength(commandArguments)) {
                 return new CommandResult(CommandResultType.FAILURE, WRONG_ARGUMENT_AMOUNT_MESSAGE);
