@@ -42,6 +42,7 @@ public class ShowMemoryCommand implements Command {
     private static final int STANDARD_DISPLAY_SIZE = 10;
     private static final int STANDARD_TABLE_COLUMN_AMOUNT = 7;
     private static final int SYMBOL_COLUMN_INDEX = 0;
+    private static final String SYMBOL_COLUMN_STANDARD_ENTRY = "0";
     private static final int CELL_POSITION_COLUMN_INDEX = 1;
     private static final String CELL_POSITION_SYMBOL = ":";
     private static final int COMMAND_NAME_COLUMN_INDEX = 2;
@@ -260,7 +261,7 @@ public class ShowMemoryCommand implements Command {
             for (int j = 0; j < rowAmount; j++) {
                 rowPosition = (displayPosition + j) % storage.getSize();
                 String entry = switch (i) {
-                    case SYMBOL_COLUMN_INDEX -> cutSimpleView[j];
+                    case SYMBOL_COLUMN_INDEX -> SYMBOL_COLUMN_STANDARD_ENTRY;
                     case CELL_POSITION_COLUMN_INDEX -> rowPosition + CELL_POSITION_SYMBOL;
                     case COMMAND_NAME_COLUMN_INDEX -> storage.getCells().get(rowPosition).getCommand();
                     case MIDDLE_BAR_FIRST_INDEX, MIDDLE_BAR_SECOND_INDEX -> MIDDLE_BAR;
