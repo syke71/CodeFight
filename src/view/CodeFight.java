@@ -81,7 +81,7 @@ public final class CodeFight {
     }
 
 
-    public static boolean areAllStringsUnique(String[] array) {
+    private static boolean areAllStringsUnique(String[] array) {
 
         Set<String> seenStrings = new HashSet<>();
 
