@@ -19,7 +19,7 @@ public class HelpCommand implements Command {
     private static final int NUMBER_OF_ARGUMENTS = 0;
     private static final boolean REQUIRES_GAME_RUNNING = false;
     private static final String DESCRIPTION_MESSAGE = "displays a short description of all currently available commands.";
-    private static final String DESCRIPTION_FORMAT = "%s : %s %s";
+    private static final String DESCRIPTION_FORMAT = "%s: %s %s";
     private static final String LINE_BREAK = "\n";
 
     /**
@@ -37,7 +37,7 @@ public class HelpCommand implements Command {
         StringBuilder message = new StringBuilder();
         // the commands list is always sorted on initialization
         for (String s : commandsList) {
-            if (commandMap.get(s).requiresGameRunning() == model.getGameStatus() || commandIsAlwaysUsable(s)) {
+            if (commandMap.get(s).requiredGameStatus() == model.getGameStatus() || commandIsAlwaysUsable(s)) {
                 message.append(commandMap.get(s).getDescription(s));
                 message.append(LINE_BREAK);
             }
@@ -62,7 +62,7 @@ public class HelpCommand implements Command {
      * @return False, although this command can be used whenever and is handled separately.
      */
     @Override
-    public boolean requiresGameRunning() {
+    public boolean requiredGameStatus() {
         return REQUIRES_GAME_RUNNING;
     }
 

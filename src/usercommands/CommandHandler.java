@@ -87,11 +87,10 @@ public class CommandHandler {
             && commands.get(commandName).getNumberOfArguments() != -1) {
             System.err.printf(ERROR_PREFIX + WRONG_ARGUMENTS_COUNT_FORMAT + "%n", commandName);
         } else if (!(commandName.equals(HELP_COMMAND_NAME) || commandName.equals(QUIT_COMMAND_NAME))
-            && doRunRequirementsMatch(commandName)) {
-            if (!commands.get(commandName).requiresGameRunning() && gameSystem.getGameStatus()) {
+            && !doRunRequirementsMatch(commandName)) {
+            if (gameSystem.getGameStatus()) {
                 System.err.printf(ERROR_PREFIX + GAME_MUST_BE_STOPPED_FORMAT + "%n", commandName);
-            }
-            if (commands.get(commandName).requiresGameRunning() && !gameSystem.getGameStatus()) {
+            } else {
                 System.err.printf(ERROR_PREFIX + GAME_MUST_BE_RUNNING_FORMAT + "%n", commandName);
             }
         } else {
@@ -111,8 +110,7 @@ public class CommandHandler {
     }
 
     private boolean doRunRequirementsMatch(String commandName) {
-        return !commands.get(commandName).requiresGameRunning() && gameSystem.getGameStatus()
-            || commands.get(commandName).requiresGameRunning() && !gameSystem.getGameStatus();
+        return commands.get(commandName).requiredGameStatus() == gameSystem.getGameStatus();
     }
 
     private void initCommands() {

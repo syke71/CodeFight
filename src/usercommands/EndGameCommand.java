@@ -4,6 +4,7 @@ import model.Ai;
 import model.GameSystem;
 
 import static model.ConstantErrorMessages.REQUIRES_GAME_RUNNING_MESSAGE;
+import static model.Constants.BETWEEN_NAME_AND_ID_PLACEHOLDER;
 
 /**
  * Represents a command to end the currently running game.
@@ -14,7 +15,7 @@ public class EndGameCommand implements Command {
     private static final int NUMBER_OF_ARGUMENTS = 0;
     private static final boolean REQUIRES_GAME_RUNNING = true;
     private static final String DESCRIPTION_MESSAGE = "This will end the currently running game.";
-    private static final String DESCRIPTION_FORMAT = "%s : %s %s";
+    private static final String DESCRIPTION_FORMAT = "%s: %s %s";
     private static final String RUNNING_AIS_FORMAT = "Running AIs: %s";
     private static final String STOPPED_AIS_FORMAT = "Stopped AIs: %s";
     private static final String NAME_PARTITION = ", ";
@@ -23,7 +24,7 @@ public class EndGameCommand implements Command {
     /**
      * Executes the command to end the currently running game.
      *
-     * @param model             The GameSystem instance.
+     * @param model            The GameSystem instance.
      * @param commandArguments The command arguments (not used).
      * @return The result of the command execution.
      */
@@ -34,9 +35,17 @@ public class EndGameCommand implements Command {
         String message = "";
         for (Ai ai : model.getInGameAis()) {
             if (model.getAliveAis().contains(ai)) {
-                runningAis.append(ai.getName()).append(NAME_PARTITION);
+                if (ai.getId() == -1) {
+                    runningAis.append(ai.getName()).append(NAME_PARTITION);
+                } else {
+                    runningAis.append(ai.getName()).append(BETWEEN_NAME_AND_ID_PLACEHOLDER).append(ai.getId()).append(NAME_PARTITION);
+                }
             } else {
-                stoppedAis.append(ai.getName()).append(NAME_PARTITION);
+                if (ai.getId() == -1) {
+                    stoppedAis.append(ai.getName()).append(NAME_PARTITION);
+                } else {
+                    stoppedAis.append(ai.getName()).append(BETWEEN_NAME_AND_ID_PLACEHOLDER).append(ai.getId()).append(NAME_PARTITION);
+                }
             }
         }
         if (!runningAis.isEmpty()) {
@@ -70,7 +79,7 @@ public class EndGameCommand implements Command {
      * @return True if the game must be running, false otherwise.
      */
     @Override
-    public boolean requiresGameRunning() {
+    public boolean requiredGameStatus() {
         return REQUIRES_GAME_RUNNING;
     }
 

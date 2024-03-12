@@ -1,10 +1,11 @@
 package usercommands;
 
 import model.Ai;
-import utility.CircularArrayList;
 import model.GameStorage;
 import model.GameStorageCell;
 import model.GameSystem;
+import utility.ArrayUtil;
+import utility.CircularArrayList;
 
 import java.util.Arrays;
 
@@ -35,7 +36,7 @@ public class ShowMemoryCommand implements Command {
     private static final boolean REQUIRES_GAME_RUNNING = true;
     private static final String DESCRIPTION_MESSAGE = "Using '%s', you can either get";
     private static final String OPTIONS_MESSAGE = "a quick Overview or detailed display of the current game storage.";
-    private static final String DESCRIPTION_FORMAT = "%s : %s %s %s";
+    private static final String DESCRIPTION_FORMAT = "%s: %s %s %s";
 
     private static final int DISPLAY_POSITION_INDEX = 0;
     private static final int STANDARD_DISPLAY_SIZE = 10;
@@ -149,7 +150,7 @@ public class ShowMemoryCommand implements Command {
      * @return True if the command requires the game to be running, false otherwise.
      */
     @Override
-    public boolean requiresGameRunning() {
+    public boolean requiredGameStatus() {
         return REQUIRES_GAME_RUNNING;
     }
 
@@ -248,7 +249,7 @@ public class ShowMemoryCommand implements Command {
         int displayPosition = determineDisplayPosition(storage, argument);
         int rowAmount = determineRowAmount(storage, argument);
 
-        String[] cutSimpleView = Arrays.copyOfRange(simpleView, displayPosition, displayPosition + rowAmount);
+        String[] cutSimpleView = ArrayUtil.copyOfRangeCircularArray(simpleView, displayPosition, displayPosition + rowAmount);
         int[] longestEntryPerColumn = new int[STANDARD_DISPLAY_SIZE];
         String[][] memoryTable2D = new String[rowAmount][STANDARD_TABLE_COLUMN_AMOUNT];
 
@@ -256,7 +257,7 @@ public class ShowMemoryCommand implements Command {
         for (int i = 0; i < STANDARD_TABLE_COLUMN_AMOUNT; i++) {
             // Find the longest entity in each column for padding
             for (int j = 0; j < rowAmount; j++) {
-                rowPosition = displayPosition + j;
+                rowPosition = (displayPosition + j) % storage.getSize();
                 String entry = switch (i) {
                     case SYMBOL_COLUMN_INDEX -> cutSimpleView[j];
                     case CELL_POSITION_COLUMN_INDEX -> rowPosition + CELL_POSITION_SYMBOL;
@@ -270,12 +271,11 @@ public class ShowMemoryCommand implements Command {
             }
             // Prepare padding for each column
             for (int j = 0; j < rowAmount; j++) {
-                rowPosition = displayPosition + j;
                 memoryTable2D[j][i] = "%" + longestEntryPerColumn[i] + "s";
             }
             // Insert Table content
             for (int j = 0; j < rowAmount; j++) {
-                rowPosition = displayPosition + j;
+                rowPosition = (displayPosition + j) % storage.getSize();
                 String entry = switch (i) {
                     case SYMBOL_COLUMN_INDEX -> cutSimpleView[j];
                     case CELL_POSITION_COLUMN_INDEX -> rowPosition  + CELL_POSITION_SYMBOL;
@@ -290,11 +290,12 @@ public class ShowMemoryCommand implements Command {
         }
         StringBuilder message = new StringBuilder();
         if (model.getGameStorage().getSize() > STANDARD_DISPLAY_SIZE) {
-            message.append(String.join("", Arrays.copyOfRange(simpleView, 0, displayPosition)))
+            message.append(String.join("", ArrayUtil.copyOfRangeCircularArray(simpleView, 0, displayPosition)))
                 .append(model.getGeneralAiSymbols()[SHOW_STORAGE_SYMBOL_INDEX])
                 .append(String.join("", cutSimpleView))
                 .append(model.getGeneralAiSymbols()[SHOW_STORAGE_SYMBOL_INDEX])
-                .append(String.join("", Arrays.copyOfRange(simpleView, displayPosition + STANDARD_DISPLAY_SIZE, simpleView.length)));
+                .append(String.join("",
+                    ArrayUtil.copyOfRangeCircularArray(simpleView, displayPosition + STANDARD_DISPLAY_SIZE, simpleView.length)));
         } else {
             message.append(Arrays.toString(cutSimpleView));
         }
@@ -326,6 +327,9 @@ public class ShowMemoryCommand implements Command {
     private boolean useStandardDisplaySize(GameStorage gameStorage) {
         return gameStorage.getSize() > STANDARD_DISPLAY_SIZE;
     }
+
+
+
     private void printError() {
         System.err.println(COMMON_ERROR_MESSAGE);
     }

@@ -25,15 +25,15 @@ public class SetInitModeCommand implements Command {
     private static final boolean REQUIRES_GAME_RUNNING = false;
     private static final String INIT_MODES_LISTING_FORMAT = " and ";
     private static final String DESCRIPTION_MESSAGE = "Using '%s', you get to chose between two storage initialization options :";
-    private static final String DESCRIPTION_FORMAT = "%s : %s %s %s.";
+    private static final String DESCRIPTION_FORMAT = "%s: %s %s %s.";
 
     private static final int MAX_SEED = 1337;
     private static final int MIN_SEED = -1337;
     private static final String UNKNOWN_INIT_TYPE_MESSAGE = "the entered init type does not exist!";
     private static final String WRONG_SEED_TYPE_MESSAGE = "the entered seed should be a number!";
     private static final String SEED_OUT_OF_BOUNCE_FORMAT = "the entered seed is out bounce for '%s'!";
-    private static final String INIT_MODE_DID_NOT_CHANGE_MESSAGE = "";
-    private static final String SUCCESSFUL_MODE_CHANGE_FORMAT = "Changed init mode from '%s' to '%s'";
+    private static final String INIT_MODE_DID_NOT_CHANGE_MESSAGE = null;
+    private static final String SUCCESSFUL_MODE_CHANGE_FORMAT = "Changed init mode from %s to %s";
     private static final String SPACE = " ";
     private static final String COMMON_ERROR_MESSAGE = "Unexpected error in SetInitModeCommand.java";
 
@@ -47,27 +47,43 @@ public class SetInitModeCommand implements Command {
      * @return The result of the command execution.
      */
     public CommandResult execute(GameSystem model, String[] commandArguments) {
+        if (commandArguments.length == 0) {
+            return new CommandResult(CommandResultType.FAILURE, WRONG_ARGUMENTS_COUNT_FORMAT.formatted(SET_INIT_MODE_COMMAND_NAME));
+        }
         String initModeName = commandArguments[INIT_MODE_NAME_INDEX];
-        InitMode newMode = InitMode.valueOf(initModeName);
-
         if (!checkValidInitType(model, initModeName)) {
             return new CommandResult(CommandResultType.FAILURE, UNKNOWN_INIT_TYPE_MESSAGE);
         }
 
+        InitMode newMode = InitMode.valueOf(initModeName);
         if (!checkValidNumberOfArguments(newMode, commandArguments)) {
             String message = WRONG_ARGUMENTS_COUNT_FORMAT.formatted(SET_INIT_MODE_COMMAND_NAME);
             return new CommandResult(CommandResultType.FAILURE, message);
         }
 
-        int newSeed = newMode == InitMode.INIT_MODE_RANDOM ? parseSeed(commandArguments[SEED_INDEX]) : 0;
-        if (newMode == InitMode.INIT_MODE_RANDOM && newSeed == Integer.MIN_VALUE) {
-            return new CommandResult(CommandResultType.FAILURE, WRONG_SEED_TYPE_MESSAGE);
-        } else if (newSeed != 0 && !checkSeedInBounds(newSeed)) {
-            return new CommandResult(CommandResultType.FAILURE, String.format(SEED_OUT_OF_BOUNCE_FORMAT, newSeed));
+        int newSeed = 0;
+        if (newMode == InitMode.INIT_MODE_RANDOM) {
+            newSeed = parseSeed(commandArguments[SEED_INDEX]);
+            if (newSeed == Integer.MIN_VALUE) {
+                return new CommandResult(CommandResultType.FAILURE, WRONG_SEED_TYPE_MESSAGE);
+            }
+            if (!checkSeedInBounds(newSeed)) {
+                return new CommandResult(CommandResultType.FAILURE, String.format(SEED_OUT_OF_BOUNCE_FORMAT, newSeed));
+            }
         }
 
-        String oldState = model.getInitMode() + SPACE + model.getSeed();
-        String newState = newMode + SPACE + newSeed;
+        String oldState;
+        String newState;
+        if (model.getInitMode().equals(InitMode.INIT_MODE_RANDOM)) {
+            oldState = model.getInitMode() + SPACE + model.getSeed();
+        } else {
+            oldState = model.getInitMode().toString();
+        }
+        if (newMode.equals(InitMode.INIT_MODE_RANDOM)) {
+            newState = newMode + SPACE + newSeed;
+        } else {
+            newState = newMode.toString();
+        }
         if (model.getInitMode() == InitMode.INIT_MODE_STOP && newMode == InitMode.INIT_MODE_STOP) {
             return new CommandResult(CommandResultType.SUCCESS, INIT_MODE_DID_NOT_CHANGE_MESSAGE);
         } else if (model.getInitMode() == InitMode.INIT_MODE_STOP) {
@@ -98,7 +114,7 @@ public class SetInitModeCommand implements Command {
      * @return False, as this command does not require the game to be running.
      */
     @Override
-    public boolean requiresGameRunning() {
+    public boolean requiredGameStatus() {
         return REQUIRES_GAME_RUNNING;
     }
 

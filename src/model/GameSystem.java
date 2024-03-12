@@ -3,11 +3,11 @@ package model;
 import model.aicommands.AiCommandHandler;
 import usercommands.CommandHandler;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.Map;
-import java.util.ArrayList;
 
 import static model.Constants.BETWEEN_NAME_AND_ID_PLACEHOLDER;
 import static model.Constants.CURRENT_AI_SYMBOL_INDEX;

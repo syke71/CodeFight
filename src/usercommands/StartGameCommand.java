@@ -21,7 +21,7 @@ public class StartGameCommand implements Command {
     private static final int LEAST_NUMBER_OF_ARGUMENTS = 2;
     private static final boolean REQUIRES_GAME_RUNNING = false;
     private static final String DESCRIPTION_MESSAGE = "With it, you can start a new game using at least %s previously added AIs.";
-    private static final String DESCRIPTION_FORMAT = "%s : %s %s";
+    private static final String DESCRIPTION_FORMAT = "%s: %s %s";
     private static final String UNKNOWN_AI_MESSAGE = "the entered AI names could not be found!";
     private static final String INVALID_AI_ARGUMENT_LENGTH = "the entered AIs have more parameters to load than the storages size!";
     private static final String GAME_STARTED_MESSAGE = "Game started.";
@@ -71,7 +71,7 @@ public class StartGameCommand implements Command {
      * @return True if the game must be running, false otherwise.
      */
     @Override
-    public boolean requiresGameRunning() {
+    public boolean requiredGameStatus() {
         return REQUIRES_GAME_RUNNING;
     }
 
