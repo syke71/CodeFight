@@ -1,5 +1,6 @@
 package usercommands;
 
+import model.Ai;
 import model.GameStorage;
 import model.GameStorageCell;
 import model.GameSystem;
@@ -59,6 +60,7 @@ public class StartGameCommand implements Command {
             model.resetGame();
             return new CommandResult(CommandResultType.FAILURE, GAME_REQUIRES_NON_STOP_COMMAND);
         }
+
         return new CommandResult(CommandResultType.SUCCESS, GAME_STARTED_MESSAGE);
     }
 
@@ -136,5 +138,14 @@ public class StartGameCommand implements Command {
             }
         }
         return true;
+    }
+
+    private void adjustPointer(GameSystem model) {
+        GameStorage storage = model.getGameStorage();
+        for (Ai ai : model.getInGameAis()) {
+            while (storage.getCells().get(ai.getPointerIndex()).equals(STOP_COMMAND_NAME)) {
+                ai.updatePointerIndex();
+            }
+        }
     }
 }

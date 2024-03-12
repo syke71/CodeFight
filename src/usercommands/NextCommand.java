@@ -61,11 +61,6 @@ public class NextCommand implements Command {
 
             // fetch currently active AI
             currentAi = model.getAliveAis().pollFirst();
-            if (currentAi.getRoundCounter() == 0) {
-                while (model.getGameStorage().getCells().get(currentAi.getPointerIndex()).getCommand().equals(STOP_COMMAND_NAME)) {
-                    currentAi.updatePointerIndex();
-                }
-            }
             model.getAiCommandHandler().execute(currentAi);
 
             // check if executed command was a 'STOP' command
