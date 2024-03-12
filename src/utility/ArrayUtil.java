@@ -1,13 +1,14 @@
 package utility;
 
-import java.lang.reflect.Array;
-
 /**
  * Utility class for array operations.
  *
  * @author uenqh
  */
-public class ArrayUtil {
+public final class ArrayUtil {
+
+    private ArrayUtil() {
+    }
 
     /**
      * Copies a range of elements from a circular array to a new array.
@@ -24,9 +25,8 @@ public class ArrayUtil {
      */
     public static <E> E[] copyOfRangeCircularArray(E[] source, int from, int to) {
         int newLength = Math.abs(to - from);
-        @SuppressWarnings("unchecked")
-        E[] output = (E[]) Array.newInstance(source.getClass().getComponentType(), newLength);
-        for (int i = 0 ; i < newLength; i++) {
+        E[] output = (E[]) java.lang.reflect.Array.newInstance(source.getClass().getComponentType(), newLength);
+        for (int i = 0; i < newLength; i++) {
             output[i] = source[(from + i) % source.length];
         }
         return output;

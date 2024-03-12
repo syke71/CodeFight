@@ -294,7 +294,8 @@ public class ShowMemoryCommand implements Command {
                 .append(model.getGeneralAiSymbols()[SHOW_STORAGE_SYMBOL_INDEX])
                 .append(String.join("", cutSimpleView))
                 .append(model.getGeneralAiSymbols()[SHOW_STORAGE_SYMBOL_INDEX])
-                .append(String.join("", ArrayUtil.copyOfRangeCircularArray(simpleView, displayPosition + STANDARD_DISPLAY_SIZE, simpleView.length)));
+                .append(String.join("",
+                    ArrayUtil.copyOfRangeCircularArray(simpleView, displayPosition + STANDARD_DISPLAY_SIZE, simpleView.length)));
         } else {
             message.append(Arrays.toString(cutSimpleView));
         }
