@@ -8,7 +8,6 @@ import java.util.ArrayList;
 import static model.ConstantErrorMessages.REQUIRES_GAME_RUNNING_MESSAGE;
 import static model.Constants.BETWEEN_NAME_AND_ID_PLACEHOLDER;
 import static model.Constants.NEXT_LINE;
-import static model.Constants.STOP_COMMAND_NAME;
 
 /**
  * Represents a command to manually cycle through the game loop.
