@@ -297,7 +297,7 @@ public class ShowMemoryCommand implements Command {
     private String insertShowStorageSymbol(GameSystem model, String[] simpleView, int displayPosition) {
         LinkedList<String> message = new LinkedList<>();
         for (int i = 0; i < simpleView.length; i++) {
-            if (i == displayPosition || i == displayPosition + STANDARD_DISPLAY_SIZE) {
+            if (i == displayPosition || i == (displayPosition + STANDARD_DISPLAY_SIZE) % model.getGameStorage().getSize()) {
                 message.add(model.getGeneralAiSymbols()[SHOW_STORAGE_SYMBOL_INDEX]);
             }
             message.add(simpleView[i]);
