@@ -143,7 +143,7 @@ public class StartGameCommand implements Command {
     private void adjustPointer(GameSystem model) {
         GameStorage storage = model.getGameStorage();
         for (Ai ai : model.getInGameAis()) {
-            while (storage.getCells().get(ai.getPointerIndex()).equals(STOP_COMMAND_NAME)) {
+            while (storage.getCells().get(ai.getPointerIndex()).getCommand().equals(STOP_COMMAND_NAME)) {
                 ai.updatePointerIndex();
             }
         }
