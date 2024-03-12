@@ -8,6 +8,7 @@ import utility.ArrayUtil;
 import utility.CircularArrayList;
 
 import java.util.Arrays;
+import java.util.LinkedList;
 
 import static model.ConstantErrorMessages.REQUIRES_GAME_RUNNING_MESSAGE;
 import static model.Constants.BETWEEN_NAME_AND_ID_PLACEHOLDER;
@@ -52,6 +53,7 @@ public class ShowMemoryCommand implements Command {
     private static final int ENTRY_B_COLUMN_INDEX = 6;
     private static final String LINE_BREAK = "\n";
     private static final String COLUMN_PARTITION = " ";
+    private static final String PADDING_FORMAT = "%%%ds";
 
     private static final String WRONG_ARGUMENT_AMOUNT_MESSAGE = "please only enter one number or leave the argument blank!";
     private static final String WRONG_ARGUMENT_TYPE_FORMAT = "only numbers are allowed for the command '%s'!";
@@ -271,7 +273,7 @@ public class ShowMemoryCommand implements Command {
             }
             // Prepare padding for each column
             for (int j = 0; j < rowAmount; j++) {
-                memoryTable2D[j][i] = "%" + longestEntryPerColumn[i] + "s";
+                memoryTable2D[j][i] = String.format(PADDING_FORMAT, longestEntryPerColumn[i]);
             }
             // Insert Table content
             for (int j = 0; j < rowAmount; j++) {
@@ -288,18 +290,20 @@ public class ShowMemoryCommand implements Command {
                 memoryTable2D[j][i] = memoryTable2D[j][i].formatted(entry);
             }
         }
-        StringBuilder message = new StringBuilder();
+        LinkedList<String> message = new LinkedList<>();
         if (model.getGameStorage().getSize() > STANDARD_DISPLAY_SIZE) {
-            message.append(String.join("", simpleView));
+            message.addAll(Arrays.asList(simpleView));
             int offset = displayPosition;
-            message.insert(offset, model.getGeneralAiSymbols()[SHOW_STORAGE_SYMBOL_INDEX]);
+            message.add(offset, model.getGeneralAiSymbols()[SHOW_STORAGE_SYMBOL_INDEX]);
             offset += STANDARD_DISPLAY_SIZE + model.getGeneralAiSymbols()[SHOW_STORAGE_SYMBOL_INDEX].length();
             offset = offset % storage.getSize();
-            message.insert(offset, model.getGeneralAiSymbols()[SHOW_STORAGE_SYMBOL_INDEX]);
+            message.add(offset, model.getGeneralAiSymbols()[SHOW_STORAGE_SYMBOL_INDEX]);
         } else {
-            message.append(Arrays.toString(cutSimpleView));
+            message.add(Arrays.toString(cutSimpleView));
         }
-        return message.append(LINE_BREAK).append(createDetailedMemory(memoryTable2D)).toString();
+        message.add(LINE_BREAK);
+        message.add(createDetailedMemory(memoryTable2D));
+        return String.join("", message);
     }
 
     private String createDetailedMemory(String[][] memoryTable2D) {
