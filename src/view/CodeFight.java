@@ -26,8 +26,8 @@ public final class CodeFight {
 
     private static final int MIN_AMOUNT_OF_ARGUMENTS = 9;
     private static final int STORAGE_SIZE_INDEX = 0;
-    private static final int MIN_STORAGE_SIZE = 7;
-    private static final int MAX_STORAGE_SIZE = 1337;
+    private static final int MIN_STORAGE_SIZE = 8;
+    private static final int MAX_STORAGE_SIZE = 1336;
     private static final int AI_INDEPENDENT_TOKEN_AMOUNT_START_INDEX = 5;
     private static final String INVALID_STARTUP_ARGUMENTS = "the entered start up arguments are invalid!";
     private static final String START_UP_MESSAGE = "Welcome to CodeFight 2024. Enter 'help' for more details.";

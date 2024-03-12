@@ -13,7 +13,7 @@ public class QuitCommand implements Command {
     private static final int NUMBER_OF_ARGUMENTS = 0;
     private static final boolean REQUIRES_GAME_RUNNING = false;
     private static final String DESCRIPTION_MESSAGE = "This quits the programm immediately.";
-    private static final String DESCRIPTION_FORMAT = "%s : %s %s";
+    private static final String DESCRIPTION_FORMAT = "%s: %s %s";
     private static final String QUIT_MESSAGE = null;
 
     /**
@@ -45,7 +45,7 @@ public class QuitCommand implements Command {
      * @return False, although this command can be used whenever and is handled separately.
      */
     @Override
-    public boolean requiresGameRunning() {
+    public boolean requiredGameStatus() {
         return REQUIRES_GAME_RUNNING;
     }
 

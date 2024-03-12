@@ -31,7 +31,7 @@ public interface Command {
      *
      * @return whether the command requires the game to be running or not.
      */
-    boolean requiresGameRunning();
+    boolean requiredGameStatus();
 
     /**
      * Returns a short description of a given command.

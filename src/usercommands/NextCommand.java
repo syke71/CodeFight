@@ -21,7 +21,7 @@ public class NextCommand implements Command {
     private static final int MAX_NUMBER_OF_ARGUMENT = 1;
     private static final boolean REQUIRES_GAME_RUNNING = true;
     private static final String DESCRIPTION_MESSAGE = "'%s' is used to manually cycle through the games loop.";
-    private static final String DESCRIPTION_FORMAT = "%s : %s %s";
+    private static final String DESCRIPTION_FORMAT = "%s: %s %s";
     private static final int ARGUMENT_INDEX = 0;
     private static final String WRONG_ARGUMENT_FORMAT_MESSAGE = "the entered argument should be a number or empty!";
     private static final String WRONG_ARGUMENT_AMOUNT_MESSAGE = "please only enter one number or leave the argument blank!";
@@ -88,7 +88,7 @@ public class NextCommand implements Command {
      * @return True, as this command requires the game to be running.
      */
     @Override
-    public boolean requiresGameRunning() {
+    public boolean requiredGameStatus() {
         return REQUIRES_GAME_RUNNING;
     }
 

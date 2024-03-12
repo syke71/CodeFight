@@ -14,7 +14,7 @@ public class RemoveAiCommand implements Command {
     private static final int NUMBER_OF_ARGUMENTS = 1;
     private static final boolean REQUIRES_GAME_RUNNING = false;
     private static final String DESCRIPTION_MESSAGE = "With it, you can remove previously added AIs.";
-    private static final String DESCRIPTION_FORMAT = "%s : %s %s";
+    private static final String DESCRIPTION_FORMAT = "%s: %s %s";
     private static final int AI_NAME_INDEX = 0;
     private static final String UNKNOWN_AI_NAME = "The entered AI does not exist!";
 
@@ -51,7 +51,7 @@ public class RemoveAiCommand implements Command {
      * @return False, as this command requires the game to be not running.
      */
     @Override
-    public boolean requiresGameRunning() {
+    public boolean requiredGameStatus() {
         return REQUIRES_GAME_RUNNING;
     }
 

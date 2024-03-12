@@ -20,7 +20,7 @@ public class ShowAiCommand implements Command {
     private static final int NUMBER_OF_ARGUMENTS = 1;
     private static final boolean REQUIRES_GAME_RUNNING = true;
     private static final String DESCRIPTION_MESSAGE = "'%s' shows you the current status of any currently playing AI.";
-    private static final String DESCRIPTION_FORMAT = "%s : %s %s";
+    private static final String DESCRIPTION_FORMAT = "%s: %s %s";
     private static final int AI_NAME_INDEX = 0;
     private static final int UNIQUE_AI_ID = -1;
     private static final String RUNNING_MESSAGE = "RUNNING";
@@ -59,7 +59,7 @@ public class ShowAiCommand implements Command {
     }
 
     @Override
-    public boolean requiresGameRunning() {
+    public boolean requiredGameStatus() {
         return REQUIRES_GAME_RUNNING;
     }
 

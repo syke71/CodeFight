@@ -25,7 +25,7 @@ public class AddAiCommand implements Command {
     private static final int ENTRY_B_INDEX = 2;
     private static final boolean REQUIRES_GAME_RUNNING = false;
     private static final String DESCRIPTION_MESSAGE = "With it, you can add uniquely named AIs";
-    private static final String DESCRIPTION_FORMAT = "%s : %s %s and %s";
+    private static final String DESCRIPTION_FORMAT = "%s: %s %s and %s";
     private static final String ARGUMENT_SEPARATOR_REGEX = ",";
     private static final String WRONG_ARGUMENT_LENGTH_MESSAGE = "the entered AI has too many specified arguments for this storage!";
     private static final String WRONG_ARGUMENT_MESSAGE = "the entered AI has the wrong format! ";
@@ -48,7 +48,7 @@ public class AddAiCommand implements Command {
         if (!checkValidArgumentLength(model, aiArguments)) {
             return new CommandResult(CommandResultType.FAILURE, WRONG_ARGUMENT_LENGTH_MESSAGE);
         }
-        if (!checkValidArguments(model, aiArguments)) {
+        if (!checkValidArgumentFormat(model, aiArguments)) {
             return new CommandResult(CommandResultType.FAILURE, WRONG_ARGUMENT_MESSAGE + ARGUMENT_FORMAT_MESSAGE);
         }
         if (checkIfNameAlreadyExists(model, aiName)) {
@@ -89,7 +89,7 @@ public class AddAiCommand implements Command {
      * @return True if the game must be running, false otherwise.
      */
     @Override
-    public boolean requiresGameRunning() {
+    public boolean requiredGameStatus() {
         return REQUIRES_GAME_RUNNING;
     }
 
@@ -106,12 +106,12 @@ public class AddAiCommand implements Command {
     }
 
     private boolean checkValidArgumentLength(GameSystem model, String[] arguments) {
-        double length = arguments.length;
-        double divisor = AMOUNT_OF_ARGUMENTS_PER_AI * MINIMUM_NUMBER_OF_AIS_PER_GAME;
-        return Math.ceil(length / divisor) < model.getGameStorage().getSize();
+        int argumentCount = arguments.length / AMOUNT_OF_ARGUMENTS_PER_AI;
+        int availableSpace = model.getGameStorage().getSize();
+        return argumentCount <= Math.ceil(availableSpace / (double) MINIMUM_NUMBER_OF_AIS_PER_GAME);
     }
 
-    private boolean checkValidArguments(GameSystem model, String[] arguments) {
+    private boolean checkValidArgumentFormat(GameSystem model, String[] arguments) {
         if (arguments.length % AMOUNT_OF_ARGUMENTS_PER_AI != 0) {
             return false;
         }
@@ -123,7 +123,9 @@ public class AddAiCommand implements Command {
                     }
                 }
                 case ENTRY_A_INDEX, ENTRY_B_INDEX -> {
-                    return Pattern.matches(INTEGER_REGEX, arguments[i]);
+                    if (!Pattern.matches(INTEGER_REGEX, arguments[i])) {
+                        return false;
+                    }
                 }
                 default -> printError();
             }
