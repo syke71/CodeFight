@@ -295,7 +295,7 @@ public class ShowMemoryCommand implements Command {
             message.addAll(Arrays.asList(simpleView));
             int offset = displayPosition;
             message.add(offset, model.getGeneralAiSymbols()[SHOW_STORAGE_SYMBOL_INDEX]);
-            offset += STANDARD_DISPLAY_SIZE;
+            offset += STANDARD_DISPLAY_SIZE + 1;
             offset = offset % storage.getSize();
             message.add(offset, model.getGeneralAiSymbols()[SHOW_STORAGE_SYMBOL_INDEX]);
         } else {
