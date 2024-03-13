@@ -183,7 +183,7 @@ public class ShowMemoryCommand implements Command {
 
     private boolean checkArgumentWithinBounds(GameSystem model, String[] commandArguments) {
         int position = Integer.parseInt(commandArguments[0]);
-        return (model.getGameStorage().getSize() - 1) > position && position >= 0;
+        return model.getGameStorage().getSize() > position && position >= 0;
     }
 
     private boolean checkArgumentsExist(String[] commandArguments) {
@@ -330,11 +330,5 @@ public class ShowMemoryCommand implements Command {
     }
     private boolean useStandardDisplaySize(GameStorage gameStorage) {
         return gameStorage.getSize() > STANDARD_DISPLAY_SIZE;
-    }
-
-
-
-    private void printError() {
-        System.err.println(COMMON_ERROR_MESSAGE);
     }
 }

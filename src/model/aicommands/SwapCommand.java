@@ -24,11 +24,11 @@ public class SwapCommand implements AiCommand {
         int index = executingAi.getPointerIndex();
         GameStorageCell currentCell = model.getGameStorage().getCells().get(index);
         int firstIndex = index + currentCell.getEntryA();
-        int first = model.getGameStorage().getCells().get(firstIndex).getEntryA();
+        int firstEntryA = model.getGameStorage().getCells().get(firstIndex).getEntryA();
         int secondIndex = index + currentCell.getEntryB();
-        int second = model.getGameStorage().getCells().get(secondIndex).getEntryB();
-        model.getGameStorage().getCells().get(firstIndex).setEntryA(second);
-        model.getGameStorage().getCells().get(secondIndex).setEntryB(first);
+        int secondEntryB = model.getGameStorage().getCells().get(secondIndex).getEntryB();
+        model.getGameStorage().getCells().get(firstIndex).setEntryA(secondEntryB);
+        model.getGameStorage().getCells().get(secondIndex).setEntryB(firstEntryA);
 
         String name = executingAi.getName() + BETWEEN_NAME_AND_ID_PLACEHOLDER + executingAi.getId();
         model.getGameStorage().getCells().get(firstIndex).postInitChangedBy(name);
