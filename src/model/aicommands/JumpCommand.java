@@ -18,7 +18,14 @@ public class JumpCommand implements AiCommand {
     public void execute(GameSystem model, Ai executingAi) {
         int index = executingAi.getPointerIndex();
         int jumpDistance = model.getGameStorage().getCells().get(index).getEntryA();
-        int targetIndex = index + jumpDistance;
+        int targetIndex = modulo((long) index + jumpDistance, model.getGameStorage().getSize());
         executingAi.updatePointerIndex(targetIndex);
+    }
+
+    private int modulo(long input, int size) {
+        if (input < 0) {
+            return (int) (input % size) + size;
+        }
+        return (int) (input % size);
     }
 }

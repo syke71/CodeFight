@@ -23,11 +23,19 @@ public class AddCommand implements AiCommand {
     public void execute(GameSystem model, Ai executingAi) {
         int index = executingAi.getPointerIndex();
         GameStorageCell cell = model.getGameStorage().getCells().get(index);
-        int result = cell.getEntryA() + cell.getEntryB();
+        int result = modulo((long) cell.getEntryA() + cell.getEntryB(), model.getGameStorage().getSize());
         model.getGameStorage().getCells().get(index).setEntryB(result);
 
         String name = executingAi.getName() + BETWEEN_NAME_AND_ID_PLACEHOLDER + executingAi.getId();
         model.getGameStorage().getCells().get(index).postInitChangedBy(name);
         executingAi.updatePointerIndex();
     }
+
+    private int modulo(long input, int size) {
+        if (input < 0) {
+            return (int) (input % size) + size;
+        }
+        return (int) (input % size);
+    }
+
 }
