@@ -1,30 +1,23 @@
 package edu.kit.uenqh.model;
 
 /**
- * Represents the arguments associated with an AI command.
+ * Represents arguments for an AI command.
  * <p>
- * An instance of this class encapsulates the command name and its two corresponding entry values.
+ * This record contains a command and two integer entries.
  * </p>
  *
  * @author uenqh
  */
-public class AiArguments {
-
-    private final String command;
-    private final int entryA;
-    private final int entryB;
+public record AiArguments(String command, int entryA, int entryB) {
 
     /**
-     * Constructs an AiArguments object with the specified command and entry values.
+     * Constructs a new {@code AiArguments} instance with the specified command and entry values.
      *
-     * @param command The name of the command.
-     * @param entryA  The first entry value.
-     * @param entryB  The second entry value.
+     * @param command the command associated with the arguments
+     * @param entryA  the first entry value
+     * @param entryB  the second entry value
      */
-    public AiArguments(String command, int entryA, int entryB) {
-        this.command = command;
-        this.entryA = entryA;
-        this.entryB = entryB;
+    public AiArguments {
     }
 
     /**
@@ -32,8 +25,9 @@ public class AiArguments {
      *
      * @return The command.
      */
-    public String getCommand() {
-        return command;
+    @Override
+    public String command() {
+        return this.command;
     }
 
     /**
@@ -41,7 +35,8 @@ public class AiArguments {
      *
      * @return The first entry value.
      */
-    public int getEntryA() {
+    @Override
+    public int entryA() {
         return this.entryA;
     }
 
@@ -50,7 +45,8 @@ public class AiArguments {
      *
      * @return The second entry value.
      */
-    public int getEntryB() {
+    @Override
+    public int entryB() {
         return this.entryB;
     }
 

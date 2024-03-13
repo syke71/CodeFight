@@ -6,6 +6,7 @@ import edu.kit.uenqh.model.GameSystem;
 
 import static edu.kit.uenqh.model.ConstantErrorMessages.REQUIRES_GAME_RUNNING_MESSAGE;
 import static edu.kit.uenqh.model.Constants.BETWEEN_NAME_AND_ID_PLACEHOLDER;
+import static edu.kit.uenqh.model.Constants.NEXT_LINE;
 
 /**
  * Represents a command to show the current status of a specific AI in the game system.
@@ -28,7 +29,6 @@ public class ShowAiCommand implements Command {
     private static final String STATUS_FORMAT = "%s (%s@%s)";
     private static final String NEXT_ACTION_FORMAT = "Next Command: %s @%s";
     private static final String GAME_STORAGE_CELL_FORMAT = "%s|%s|%s";
-    private static final String BREAK_LINE = "\n";
     private static final String UNKNOWN_AI_NAME = "The entered AI does not exist!";
 
     @Override
@@ -53,7 +53,7 @@ public class ShowAiCommand implements Command {
             } else {
                 adjustedPoint = (adjustedPoint % model.getGameStorage().getSize()) + model.getGameStorage().getSize();
             }
-            message += BREAK_LINE + String.format(NEXT_ACTION_FORMAT, nextAction, adjustedPoint);
+            message += NEXT_LINE + String.format(NEXT_ACTION_FORMAT, nextAction, adjustedPoint);
         }
 
         return new CommandResult(CommandResultType.SUCCESS, message);

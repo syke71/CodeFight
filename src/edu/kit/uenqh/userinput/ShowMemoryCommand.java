@@ -12,6 +12,7 @@ import static edu.kit.uenqh.model.Constants.CURRENT_AI_SYMBOL_INDEX;
 import static edu.kit.uenqh.model.Constants.JUMP_CHECK_CELL_COMMAND_NAME;
 import static edu.kit.uenqh.model.Constants.JUMP_COMMAND_NAME;
 import static edu.kit.uenqh.model.Constants.NEXT_AIS_SYMBOL_INDEX;
+import static edu.kit.uenqh.model.Constants.NEXT_LINE;
 import static edu.kit.uenqh.model.Constants.SHOW_MEMORY_COMMAND_NAME;
 import static edu.kit.uenqh.model.Constants.SHOW_STORAGE_SYMBOL_INDEX;
 import static edu.kit.uenqh.model.Constants.STOP_COMMAND_NAME;
@@ -48,7 +49,6 @@ public class ShowMemoryCommand implements Command {
     private static final String MIDDLE_BAR = "|";
     private static final int ENTRY_A_COLUMN_INDEX = 4;
     private static final int ENTRY_B_COLUMN_INDEX = 6;
-    private static final String LINE_BREAK = "\n";
     private static final String COLUMN_PARTITION = " ";
     private static final String PADDING_FORMAT = "%%%ds";
 
@@ -288,7 +288,7 @@ public class ShowMemoryCommand implements Command {
             }
         }
         return insertShowStorageSymbol(model, simpleView, displayPosition, rowAmount)
-            + LINE_BREAK
+            + NEXT_LINE
             + createDetailedMemory(memoryTable2D);
     }
 
@@ -302,9 +302,9 @@ public class ShowMemoryCommand implements Command {
                     memoryTable.append(COLUMN_PARTITION);
                 }
             }
-            memoryTable.append(LINE_BREAK);
+            memoryTable.append(NEXT_LINE);
         }
-        memoryTable.replace(memoryTable.length() - LINE_BREAK.length(), memoryTable.length(), "");
+        memoryTable.replace(memoryTable.length() - NEXT_LINE.length(), memoryTable.length(), "");
         return memoryTable.toString();
     }
 

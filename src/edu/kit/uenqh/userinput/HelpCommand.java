@@ -7,6 +7,7 @@ import java.util.Map;
 
 import static edu.kit.uenqh.model.ConstantErrorMessages.NO_RUNNING_REQUIREMENTS_MESSAGE;
 import static edu.kit.uenqh.model.Constants.HELP_COMMAND_NAME;
+import static edu.kit.uenqh.model.Constants.NEXT_LINE;
 import static edu.kit.uenqh.model.Constants.QUIT_COMMAND_NAME;
 
 /**
@@ -20,7 +21,6 @@ public class HelpCommand implements Command {
     private static final boolean REQUIRES_GAME_RUNNING = false;
     private static final String DESCRIPTION_MESSAGE = "It displays a short description of all currently available commands.";
     private static final String DESCRIPTION_FORMAT = "%s: %s %s";
-    private static final String LINE_BREAK = "\n";
 
     /**
      * Executes the command to display the help message.
@@ -39,10 +39,10 @@ public class HelpCommand implements Command {
         for (String s : commandsList) {
             if (commandMap.get(s).requiredGameStatus() == model.getGameStatus() || commandIsAlwaysUsable(s)) {
                 message.append(commandMap.get(s).getDescription(s));
-                message.append(LINE_BREAK);
+                message.append(NEXT_LINE);
             }
         }
-        message.delete(message.length() - LINE_BREAK.length(), message.length());
+        message.delete(message.length() - NEXT_LINE.length(), message.length());
         return new CommandResult(CommandResultType.SUCCESS, message.toString());
     }
 

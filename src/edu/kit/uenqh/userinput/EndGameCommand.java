@@ -5,6 +5,7 @@ import edu.kit.uenqh.model.GameSystem;
 
 import static edu.kit.uenqh.model.ConstantErrorMessages.REQUIRES_GAME_RUNNING_MESSAGE;
 import static edu.kit.uenqh.model.Constants.BETWEEN_NAME_AND_ID_PLACEHOLDER;
+import static edu.kit.uenqh.model.Constants.NEXT_LINE;
 
 /**
  * Represents a command to end the currently running game.
@@ -19,7 +20,6 @@ public class EndGameCommand implements Command {
     private static final String RUNNING_AIS_FORMAT = "Running AIs: %s";
     private static final String STOPPED_AIS_FORMAT = "Stopped AIs: %s";
     private static final String NAME_PARTITION = ", ";
-    private static final String LINE_BREAK = "\n";
 
     /**
      * Executes the command to end the currently running game.
@@ -52,7 +52,7 @@ public class EndGameCommand implements Command {
             runningAis.replace(runningAis.length() - NAME_PARTITION.length(), runningAis.length(), "");
             message += String.format(RUNNING_AIS_FORMAT, runningAis.toString());
             if (!stoppedAis.isEmpty()) {
-                message += LINE_BREAK;
+                message += NEXT_LINE;
             }
         }
         if (!stoppedAis.isEmpty()) {

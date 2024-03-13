@@ -98,9 +98,9 @@ public class GameSystem {
             currentAi.updatePointerIndex(currentPosition);
 
             for (int j = 0; j < currentAi.getArguments().size(); j++) {
-                this.gameStorage.getCells().get(currentPosition + j).setCommand(currentAi.getArguments().get(j).getCommand());
-                this.gameStorage.getCells().get(currentPosition + j).setEntryA(currentAi.getArguments().get(j).getEntryA());
-                this.gameStorage.getCells().get(currentPosition + j).setEntryB(currentAi.getArguments().get(j).getEntryB());
+                this.gameStorage.getCells().get(currentPosition + j).setCommand(currentAi.getArguments().get(j).command());
+                this.gameStorage.getCells().get(currentPosition + j).setEntryA(currentAi.getArguments().get(j).entryA());
+                this.gameStorage.getCells().get(currentPosition + j).setEntryB(currentAi.getArguments().get(j).entryB());
                 this.gameStorage.getCells().get(currentPosition + j).changedBy(currentAi.getName()
                     + BETWEEN_NAME_AND_ID_PLACEHOLDER
                     + currentAi.getId());
@@ -112,7 +112,7 @@ public class GameSystem {
         for (String ai : ais) {
             loadAi(ai);
         }
-        checkDuplicateInGameAis();
+        adjustDuplicateAiIDs();
     }
     private void loadAi(String name) {
         if (this.aiMap.containsKey(name)) {
@@ -138,7 +138,7 @@ public class GameSystem {
         return symbols;
     }
 
-    private void checkDuplicateInGameAis() {
+    private void adjustDuplicateAiIDs() {
         Map<String, Integer> counts = new HashMap<>();
         for (Ai ai : this.inGameAis) {
             int count = counts.getOrDefault(ai.getName(), 0);

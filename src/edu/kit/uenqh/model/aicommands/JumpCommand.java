@@ -22,7 +22,7 @@ public class JumpCommand implements AiCommand {
         executingAi.updatePointerIndex(targetIndex);
     }
 
-    private int modulo(long input, int size) {
+    private static int modulo(long input, int size) {
         if (input < 0) {
             return (int) (input % size) + size;
         }
