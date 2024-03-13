@@ -8,7 +8,6 @@ import utility.ArrayUtil;
 import utility.CircularArrayList;
 
 import java.util.LinkedList;
-import java.util.List;
 
 import static model.ConstantErrorMessages.REQUIRES_GAME_RUNNING_MESSAGE;
 import static model.Constants.BETWEEN_NAME_AND_ID_PLACEHOLDER;
@@ -296,23 +295,6 @@ public class ShowMemoryCommand implements Command {
             + createDetailedMemory(memoryTable2D);
     }
 
-    private String insertShowStorageSymbol(GameSystem model, String[] simpleView, int displayPosition, int rowAmount) {
-        LinkedList<String> message = new LinkedList<>();
-        if (!useStandardDisplaySize(model.getGameStorage())) {
-            message.add(model.getGeneralAiSymbols()[SHOW_STORAGE_SYMBOL_INDEX]);
-            message.add(String.join("", simpleView));
-            message.add(model.getGeneralAiSymbols()[SHOW_STORAGE_SYMBOL_INDEX]);
-        } else {
-            for (int i = 0; i < simpleView.length; i++) {
-                if (i == displayPosition || i == (displayPosition + STANDARD_DISPLAY_SIZE) % model.getGameStorage().getSize()) {
-                    message.add(model.getGeneralAiSymbols()[SHOW_STORAGE_SYMBOL_INDEX]);
-                }
-                message.add(simpleView[i]);
-            }
-        }
-        return String.join("", message);
-    }
-
     private String createDetailedMemory(String[][] memoryTable2D) {
         StringBuilder memoryTable = new StringBuilder();
         for (String[] strings : memoryTable2D) {
@@ -327,6 +309,26 @@ public class ShowMemoryCommand implements Command {
         }
         memoryTable.replace(memoryTable.length() - LINE_BREAK.length(), memoryTable.length(), "");
         return memoryTable.toString();
+    }
+
+    private String insertShowStorageSymbol(GameSystem model, String[] simpleView, int displayPosition, int rowAmount) {
+        LinkedList<String> message = new LinkedList<>();
+        if (!useStandardDisplaySize(model.getGameStorage())) {
+            for (int i = 0; i < simpleView.length; i++) {
+                if (i == displayPosition || i == displayPosition + rowAmount) {
+                    message.add(model.getGeneralAiSymbols()[SHOW_STORAGE_SYMBOL_INDEX]);
+                }
+                message.add(simpleView[i]);
+            }
+        } else {
+            for (int i = 0; i < simpleView.length; i++) {
+                if (i == displayPosition || i == (displayPosition + STANDARD_DISPLAY_SIZE) % model.getGameStorage().getSize()) {
+                    message.add(model.getGeneralAiSymbols()[SHOW_STORAGE_SYMBOL_INDEX]);
+                }
+                message.add(simpleView[i]);
+            }
+        }
+        return String.join("", message);
     }
 
     private int determineDisplayPosition(GameStorage gameStorage, String argument) {
