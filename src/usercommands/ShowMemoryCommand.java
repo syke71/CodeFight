@@ -8,6 +8,7 @@ import utility.ArrayUtil;
 import utility.CircularArrayList;
 
 import java.util.LinkedList;
+import java.util.List;
 
 import static model.ConstantErrorMessages.REQUIRES_GAME_RUNNING_MESSAGE;
 import static model.Constants.BETWEEN_NAME_AND_ID_PLACEHOLDER;
@@ -297,11 +298,17 @@ public class ShowMemoryCommand implements Command {
 
     private String insertShowStorageSymbol(GameSystem model, String[] simpleView, int displayPosition, int rowAmount) {
         LinkedList<String> message = new LinkedList<>();
-        for (int i = 0; i < simpleView.length; i++) {
-            if (i == displayPosition || i == (displayPosition + rowAmount) % model.getGameStorage().getSize()) {
-                message.add(model.getGeneralAiSymbols()[SHOW_STORAGE_SYMBOL_INDEX]);
+        if (!useStandardDisplaySize(model.getGameStorage())) {
+            message.add(model.getGeneralAiSymbols()[SHOW_STORAGE_SYMBOL_INDEX]);
+            message.add(String.join("", simpleView));
+            message.add(model.getGeneralAiSymbols()[SHOW_STORAGE_SYMBOL_INDEX]);
+        } else {
+            for (int i = 0; i < simpleView.length; i++) {
+                if (i == displayPosition || i == (displayPosition + STANDARD_DISPLAY_SIZE) % model.getGameStorage().getSize()) {
+                    message.add(model.getGeneralAiSymbols()[SHOW_STORAGE_SYMBOL_INDEX]);
+                }
+                message.add(simpleView[i]);
             }
-            message.add(simpleView[i]);
         }
         return String.join("", message);
     }
