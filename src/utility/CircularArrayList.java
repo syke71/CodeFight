@@ -65,7 +65,7 @@ public class CircularArrayList<E> extends ArrayList<E> {
             return (int) (input % size) + size;
         }
 
-        return (int) input % size;
+        return (int) (input % size);
     }
 
     /**
