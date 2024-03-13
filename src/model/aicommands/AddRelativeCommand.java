@@ -23,8 +23,7 @@ public class AddRelativeCommand implements AiCommand {
         int index = executingAi.getPointerIndex();
         GameStorageCell source = model.getGameStorage().getCells().get(index);
         long targetIndex = index + (long) source.getEntryB();
-        int result = modulo((long) source.getEntryA() + model.getGameStorage().getCells().get(targetIndex).getEntryB(),
-            model.getGameStorage().getSize());
+        int result = source.getEntryA() + model.getGameStorage().getCells().get(targetIndex).getEntryB();
         model.getGameStorage().getCells().get(targetIndex).setEntryB(result);
 
         String name = executingAi.getName() + BETWEEN_NAME_AND_ID_PLACEHOLDER + executingAi.getId();
