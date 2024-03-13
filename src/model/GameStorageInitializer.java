@@ -66,10 +66,10 @@ public class GameStorageInitializer {
             random = this.numberGenerator.nextInt(bound);
             cell.setCommand(model.getAiCommandHandler().getAiCommandNameArrayList().get(random));
 
-            random = this.numberGenerator.nextInt(bound);
+            random = this.numberGenerator.nextInt();
             cell.setEntryA(random);
 
-            random = this.numberGenerator.nextInt(bound);
+            random = this.numberGenerator.nextInt();
             cell.setEntryB(random);
         }
     }
