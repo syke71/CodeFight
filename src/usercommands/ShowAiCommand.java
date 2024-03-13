@@ -47,7 +47,7 @@ public class ShowAiCommand implements Command {
             GameStorageCell cell = model.getGameStorage().getCells().get(ai.getPointerIndex());
             String nextAction = String.format(GAME_STORAGE_CELL_FORMAT, cell.getCommand(), cell.getEntryA(), cell.getEntryB());
             int adjustedPoint = ai.getPointerIndex();
-            if (adjustedPoint > 0) {
+            if (adjustedPoint >= 0) {
                 adjustedPoint = adjustedPoint % model.getGameStorage().getSize();
             } else {
                 adjustedPoint = (adjustedPoint % model.getGameStorage().getSize()) + model.getGameStorage().getSize();
