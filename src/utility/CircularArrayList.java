@@ -48,14 +48,13 @@ public class CircularArrayList<E> extends ArrayList<E> {
     }
 
     private int modulo(int input) {
-        int output = input;
 
         // Handle negative indices
-        if (output < 0) {
-            output += size * ((-output / size) + 1);
+        if (input < 0) {
+            return (input % size) + size;
         }
 
-        return output % size;
+        return input % size;
     }
 
     /**

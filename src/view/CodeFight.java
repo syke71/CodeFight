@@ -80,7 +80,6 @@ public final class CodeFight {
         return storageSize >= MIN_STORAGE_SIZE && storageSize <= MAX_STORAGE_SIZE;
     }
 
-
     private static boolean areAllStringsUnique(String[] array) {
 
         Set<String> seenStrings = new HashSet<>();
