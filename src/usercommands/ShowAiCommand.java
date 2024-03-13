@@ -41,7 +41,8 @@ public class ShowAiCommand implements Command {
 
         Ai ai = getAi(model, aiName);
         String status = isAlive(model, aiName) ? RUNNING_MESSAGE : STOPPED_MESSAGE;
-        String message = String.format(STATUS_FORMAT, aiName, status, ai.getRoundCounter());
+        int adjustedRoundCounter = isAlive(model, aiName) ? ai.getRoundCounter() : ai.getRoundCounter() + 1;
+        String message = String.format(STATUS_FORMAT, aiName, status, adjustedRoundCounter);
 
         if (isAlive(model, aiName)) {
             GameStorageCell cell = model.getGameStorage().getCells().get(ai.getPointerIndex());
