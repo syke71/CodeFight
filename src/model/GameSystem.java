@@ -94,7 +94,7 @@ public class GameSystem {
 
         for (int i = 0; i < this.inGameAis.size(); i++) {
             currentAi = inGameAis.get(i);
-            currentPosition = (storageSize / numberOfAis) * i;
+            currentPosition = (int) ((storageSize / (double) numberOfAis) * i);
             currentAi.updatePointerIndex(currentPosition);
 
             for (int j = 0; j < currentAi.getArguments().size(); j++) {

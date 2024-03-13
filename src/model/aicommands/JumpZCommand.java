@@ -23,6 +23,8 @@ public class JumpZCommand implements AiCommand {
         GameStorageCell checkCell = model.getGameStorage().getCells().get(index + currentCell.getEntryB());
         if (checkCell.getEntryB() == COMPARING_AMOUNT) {
             new JumpCommand().execute(model, executingAi);
+        } else {
+            executingAi.updatePointerIndex();
         }
     }
 }
