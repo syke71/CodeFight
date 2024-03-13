@@ -7,15 +7,15 @@ package edu.kit.uenqh.model;
  * </p>
  *
  * @author uenqh
+ *
+ * @param command the command associated with the arguments
+ * @param entryA  the first entry value
+ * @param entryB  the second entry value
  */
 public record AiArguments(String command, int entryA, int entryB) {
 
     /**
-     * Constructs a new {@code AiArguments} instance with the specified command and entry values.
-     *
-     * @param command the command associated with the arguments
-     * @param entryA  the first entry value
-     * @param entryB  the second entry value
+     * Constructs a new {@code AiArguments} instance
      */
     public AiArguments {
     }
