@@ -30,11 +30,4 @@ public class AddRelativeCommand implements AiCommand {
         model.getGameStorage().getCells().get(targetIndex).postInitChangedBy(name);
         executingAi.updatePointerIndex();
     }
-
-    private int modulo(long input, int size) {
-        if (input < 0) {
-            return (int) (input % size) + size;
-        }
-        return (int) (input % size);
-    }
 }
