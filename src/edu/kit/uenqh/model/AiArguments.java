@@ -15,7 +15,7 @@ package edu.kit.uenqh.model;
 public record AiArguments(String command, int entryA, int entryB) {
 
     /**
-     * Constructs a new {@code AiArguments} instance
+     * Constructs a new {@code AiArguments} instance.
      */
     public AiArguments {
     }
