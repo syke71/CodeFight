@@ -4,10 +4,7 @@ import model.Ai;
 import model.GameStorage;
 import model.GameStorageCell;
 import model.GameSystem;
-import utility.ArrayUtil;
 import utility.CircularArrayList;
-
-import java.util.LinkedList;
 
 import static model.ConstantErrorMessages.REQUIRES_GAME_RUNNING_MESSAGE;
 import static model.Constants.BETWEEN_NAME_AND_ID_PLACEHOLDER;
@@ -93,45 +90,45 @@ public class ShowMemoryCommand implements Command {
         }
 
         GameStorage gameStorage = model.getGameStorage();
-        CircularArrayList<String> gameStorageToString = new CircularArrayList<>(gameStorage.getSize());
+        CircularArrayList<String> memoryOverview = new CircularArrayList<>(gameStorage.getSize());
 
         // Standard case (5) : Cell has not been changed yet
         for (int i = 0; i < gameStorage.getSize(); i++) {
-            gameStorageToString.add(model.getGeneralAiSymbols()[UNCHANGED_FIELD_SYMBOL_INDEX]);
+            memoryOverview.add(model.getGeneralAiSymbols()[UNCHANGED_FIELD_SYMBOL_INDEX]);
         }
         //  Case 4 : Cell has been altered by an AI
-        for (int i = 0; i < gameStorageToString.size(); i++) {
+        for (int i = 0; i < memoryOverview.size(); i++) {
             GameStorageCell currentCell = gameStorage.getCells().get(i);
             if (!currentCell.getLastChangedBy().isEmpty()) {
                 String symbol = getSymbol(model, currentCell.getLastChangedBy());
-                gameStorageToString.set(i, symbol);
+                memoryOverview.set(i, symbol);
             }
         }
         // Case 3 : Cell is an 'AI-Bomb'
-        for (int i = 0; i < gameStorageToString.size(); i++) {
+        for (int i = 0; i < memoryOverview.size(); i++) {
             GameStorageCell currentCell = gameStorage.getCells().get(i);
             if (!currentCell.getLastChangedBy().isEmpty()) {
                 if (isAiBomb(currentCell)) {
                     String bombSymbol = getBombSymbol(model, currentCell.getLastChangedBy());
-                    gameStorageToString.set(i, bombSymbol);
+                    memoryOverview.set(i, bombSymbol);
                 }
             }
         }
         if (!model.getAliveAis().isEmpty()) {
             // Case 2 : Cell will be executed in current cycle
             for (int i : getNextCommandIndexOfOtherAis(model)) {
-                gameStorageToString.set(i, model.getGeneralAiSymbols()[NEXT_AIS_SYMBOL_INDEX]);
+                memoryOverview.set(i, model.getGeneralAiSymbols()[NEXT_AIS_SYMBOL_INDEX]);
             }
             // Case 1 : Cell will be executed in next turn
-            gameStorageToString.set(getNextCommandIndexOfNextAi(model), model.getGeneralAiSymbols()[CURRENT_AI_SYMBOL_INDEX]);
+            memoryOverview.set(getNextCommandIndexOfNextAi(model), model.getGeneralAiSymbols()[CURRENT_AI_SYMBOL_INDEX]);
         }
 
         String message;
         if (checkArgumentsExist(commandArguments)) {
-            message = createDetailedMemory(model, gameStorageToString.toArray(new String[0]),
+            message = createDetailedMemory(model, memoryOverview,
                 commandArguments[DISPLAY_POSITION_INDEX]);
         } else {
-            message = String.join("", gameStorageToString);
+            message = String.join("", memoryOverview);
         }
         return new CommandResult(CommandResultType.SUCCESS, message);
     }
@@ -246,12 +243,12 @@ public class ShowMemoryCommand implements Command {
         return COMMON_ERROR_MESSAGE;
     }
 
-    private String createDetailedMemory(GameSystem model, String[] simpleView, String argument) {
+    private String createDetailedMemory(GameSystem model, CircularArrayList<String> simpleView, String argument) {
         GameStorage storage = model.getGameStorage();
         int displayPosition = determineDisplayPosition(storage, argument);
         int rowAmount = determineRowAmount(storage, argument);
 
-        String[] cutSimpleView = ArrayUtil.copyOfRangeCircularArray(simpleView, displayPosition, displayPosition + rowAmount);
+        CircularArrayList<String> cutSimpleView = CircularArrayList.copyOfRange(simpleView, displayPosition, displayPosition + rowAmount);
         int[] longestEntryPerColumn = new int[STANDARD_DISPLAY_SIZE];
         String[][] memoryTable2D = new String[rowAmount][STANDARD_TABLE_COLUMN_AMOUNT];
 
@@ -279,7 +276,7 @@ public class ShowMemoryCommand implements Command {
             for (int j = 0; j < rowAmount; j++) {
                 rowPosition = (displayPosition + j) % storage.getSize();
                 String entry = switch (i) {
-                    case SYMBOL_COLUMN_INDEX -> cutSimpleView[j];
+                    case SYMBOL_COLUMN_INDEX -> cutSimpleView.get(j);
                     case CELL_POSITION_COLUMN_INDEX -> rowPosition  + CELL_POSITION_SYMBOL;
                     case COMMAND_NAME_COLUMN_INDEX -> storage.getCells().get(rowPosition).getCommand();
                     case MIDDLE_BAR_FIRST_INDEX, MIDDLE_BAR_SECOND_INDEX -> MIDDLE_BAR;
@@ -311,24 +308,17 @@ public class ShowMemoryCommand implements Command {
         return memoryTable.toString();
     }
 
-    private String insertShowStorageSymbol(GameSystem model, String[] simpleView, int displayPosition, int rowAmount) {
-        LinkedList<String> message = new LinkedList<>();
-        if (!useStandardDisplaySize(model.getGameStorage())) {
-            for (int i = 0; i < simpleView.length; i++) {
-                if (i == displayPosition || i == displayPosition + rowAmount) {
-                    message.add(model.getGeneralAiSymbols()[SHOW_STORAGE_SYMBOL_INDEX]);
-                }
-                message.add(simpleView[i]);
-            }
+    private String insertShowStorageSymbol(GameSystem model, CircularArrayList<String> simpleView, int displayPosition, int rowAmount) {
+        String showStorageSymbol = model.getGeneralAiSymbols()[SHOW_STORAGE_SYMBOL_INDEX];
+        simpleView.add(displayPosition, showStorageSymbol);
+
+        if (displayPosition + rowAmount > model.getGameStorage().getSize()) {
+            simpleView.add((displayPosition + rowAmount) % model.getGameStorage().getSize(), showStorageSymbol);
         } else {
-            for (int i = 0; i < simpleView.length; i++) {
-                if (i == displayPosition || i == (displayPosition + STANDARD_DISPLAY_SIZE) % model.getGameStorage().getSize()) {
-                    message.add(model.getGeneralAiSymbols()[SHOW_STORAGE_SYMBOL_INDEX]);
-                }
-                message.add(simpleView[i]);
-            }
+            simpleView.add(displayPosition + rowAmount + 1, showStorageSymbol);
         }
-        return String.join("", message);
+
+        return String.join("", simpleView);
     }
 
     private int determineDisplayPosition(GameStorage gameStorage, String argument) {

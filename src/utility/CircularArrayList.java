@@ -57,4 +57,21 @@ public class CircularArrayList<E> extends ArrayList<E> {
 
         return output % size;
     }
+
+    /**
+     * Copies a range of elements from a circular ArrayList to a new ArrayList.
+     *
+     * @param source the source ArrayList
+     * @param from the initial index of the range to be copied, inclusive
+     * @param to the final index of the range to be copied, exclusive
+     * @return a new String ArrayList containing the specified range of elements from the source ArrayList
+     */
+    public static CircularArrayList<String> copyOfRange(CircularArrayList<String> source, int from, int to) {
+        int newLength = Math.abs(to - from);
+        CircularArrayList<String> output = new CircularArrayList<>(source.size);
+        for (int i = 0; i < newLength; i++) {
+            output.add(source.get((from + i) % source.size()));
+        }
+        return output;
+    }
 }
