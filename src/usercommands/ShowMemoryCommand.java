@@ -290,15 +290,15 @@ public class ShowMemoryCommand implements Command {
                 memoryTable2D[j][i] = memoryTable2D[j][i].formatted(entry);
             }
         }
-        return insertShowStorageSymbol(model, simpleView, displayPosition)
+        return insertShowStorageSymbol(model, simpleView, displayPosition, rowAmount)
             + LINE_BREAK
             + createDetailedMemory(memoryTable2D);
     }
 
-    private String insertShowStorageSymbol(GameSystem model, String[] simpleView, int displayPosition) {
+    private String insertShowStorageSymbol(GameSystem model, String[] simpleView, int displayPosition, int rowAmount) {
         LinkedList<String> message = new LinkedList<>();
         for (int i = 0; i < simpleView.length; i++) {
-            if (i == displayPosition || i == (displayPosition + STANDARD_DISPLAY_SIZE) % model.getGameStorage().getSize()) {
+            if (i == displayPosition || i == (displayPosition + rowAmount) % model.getGameStorage().getSize()) {
                 message.add(model.getGeneralAiSymbols()[SHOW_STORAGE_SYMBOL_INDEX]);
             }
             message.add(simpleView[i]);
