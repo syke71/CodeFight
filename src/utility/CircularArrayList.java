@@ -35,6 +35,17 @@ public class CircularArrayList<E> extends ArrayList<E> {
     }
 
     /**
+     * Returns the element at the specified index in a circular manner.
+     * If the index is out of bounds, it wraps around to the appropriate index within the bounds.
+     *
+     * @param index the index of the element to return
+     * @return the element at the specified index
+     */
+    public E get(long index) {
+        return super.get(modulo(index));
+    }
+
+    /**
      * Sets the element at the specified index to the specified element in a circular manner.
      * If the index is out of bounds, it wraps around to the appropriate index within the bounds.
      *
@@ -47,14 +58,14 @@ public class CircularArrayList<E> extends ArrayList<E> {
         return super.set(modulo(index), element);
     }
 
-    private int modulo(int input) {
+    private int modulo(long input) {
 
         // Handle negative indices
         if (input < 0) {
-            return (input % size) + size;
+            return (int) (input % size) + size;
         }
 
-        return input % size;
+        return (int) input % size;
     }
 
     /**

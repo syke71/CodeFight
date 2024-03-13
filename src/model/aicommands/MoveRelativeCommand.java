@@ -27,7 +27,7 @@ public class MoveRelativeCommand implements AiCommand {
 
         GameStorageCell source = model.getGameStorage().getCells().get(index + currentCell.getEntryA());
 
-        int targetIndex = index + currentCell.getEntryB();
+        long targetIndex = index + currentCell.getEntryB();
         model.getGameStorage().getCells().get(targetIndex).setCommand(source.getCommand());
         model.getGameStorage().getCells().get(targetIndex).setEntryA(source.getEntryA());
         model.getGameStorage().getCells().get(targetIndex).setEntryB(source.getEntryB());

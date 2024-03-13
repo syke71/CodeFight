@@ -25,9 +25,9 @@ public class MoveIndirectCommand implements AiCommand {
         int index = executingAi.getPointerIndex();
         GameStorageCell currentCell = model.getGameStorage().getCells().get(index);
         GameStorageCell source = model.getGameStorage().getCells().get(index + currentCell.getEntryA());
-        int intermediateIndex = index + currentCell.getEntryB();
+        long intermediateIndex = index + currentCell.getEntryB();
         GameStorageCell intermediate = model.getGameStorage().getCells().get(intermediateIndex);
-        int targetIndex = intermediateIndex + intermediate.getEntryB();
+        long targetIndex = intermediateIndex + intermediate.getEntryB();
         model.getGameStorage().getCells().get(targetIndex).setCommand(source.getCommand());
         model.getGameStorage().getCells().get(targetIndex).setEntryA(source.getEntryA());
         model.getGameStorage().getCells().get(targetIndex).setEntryB(source.getEntryB());
