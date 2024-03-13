@@ -245,8 +245,8 @@ public class ShowMemoryCommand implements Command {
 
     private String createDetailedMemory(GameSystem model, CircularArrayList<String> simpleView, String argument) {
         GameStorage storage = model.getGameStorage();
-        int displayPosition = determineDisplayPosition(storage, argument);
-        int rowAmount = determineRowAmount(storage, argument);
+        int displayPosition = Integer.parseInt(argument);
+        int rowAmount = determineRowAmount(storage);
 
         CircularArrayList<String> cutSimpleView = CircularArrayList.copyOfRange(simpleView, displayPosition, displayPosition + rowAmount);
         int[] longestEntryPerColumn = new int[STANDARD_DISPLAY_SIZE];
@@ -321,10 +321,7 @@ public class ShowMemoryCommand implements Command {
         return String.join("", simpleView);
     }
 
-    private int determineDisplayPosition(GameStorage gameStorage, String argument) {
-        return useStandardDisplaySize(gameStorage) ? Integer.parseInt(argument) : 0;
-    }
-    private int determineRowAmount(GameStorage gameStorage, String argument) {
+    private int determineRowAmount(GameStorage gameStorage) {
         return useStandardDisplaySize(gameStorage) ? STANDARD_DISPLAY_SIZE : gameStorage.getSize();
     }
     private boolean useStandardDisplaySize(GameStorage gameStorage) {
