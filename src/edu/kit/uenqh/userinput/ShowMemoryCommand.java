@@ -89,39 +89,7 @@ public class ShowMemoryCommand implements Command {
             }
         }
 
-        GameStorage gameStorage = model.getGameStorage();
-        CircularArrayList<String> memoryOverview = new CircularArrayList<>(gameStorage.getSize());
-
-        // Standard case (5) : Cell has not been changed yet
-        for (int i = 0; i < gameStorage.getSize(); i++) {
-            memoryOverview.add(model.getGeneralAiSymbols()[UNCHANGED_FIELD_SYMBOL_INDEX]);
-        }
-        //  Case 4 : Cell has been altered by an AI
-        for (int i = 0; i < memoryOverview.size(); i++) {
-            GameStorageCell currentCell = gameStorage.getCells().get(i);
-            if (!currentCell.getLastChangedBy().isEmpty()) {
-                String symbol = getSymbol(model, currentCell.getLastChangedBy());
-                memoryOverview.set(i, symbol);
-            }
-        }
-        // Case 3 : Cell is an 'AI-Bomb'
-        for (int i = 0; i < memoryOverview.size(); i++) {
-            GameStorageCell currentCell = gameStorage.getCells().get(i);
-            if (!currentCell.getLastChangedBy().isEmpty()) {
-                if (isAiBomb(currentCell)) {
-                    String bombSymbol = getBombSymbol(model, currentCell.getLastChangedBy());
-                    memoryOverview.set(i, bombSymbol);
-                }
-            }
-        }
-        if (!model.getAliveAis().isEmpty()) {
-            // Case 2 : Cell will be executed in current cycle
-            for (int i : getNextCommandIndexOfOtherAis(model)) {
-                memoryOverview.set(i, model.getGeneralAiSymbols()[NEXT_AIS_SYMBOL_INDEX]);
-            }
-            // Case 1 : Cell will be executed in next turn
-            memoryOverview.set(getNextCommandIndexOfNextAi(model), model.getGeneralAiSymbols()[CURRENT_AI_SYMBOL_INDEX]);
-        }
+        CircularArrayList<String> memoryOverview = createSimpleOverview(model);
 
         String message;
         if (checkArgumentsExist(commandArguments)) {
@@ -241,6 +209,43 @@ public class ShowMemoryCommand implements Command {
             }
         }
         return COMMON_ERROR_MESSAGE;
+    }
+
+    private CircularArrayList<String> createSimpleOverview(GameSystem model) {
+        GameStorage gameStorage = model.getGameStorage();
+        CircularArrayList<String> memoryOverview = new CircularArrayList<>(gameStorage.getSize());
+
+        // Standard case (5) : Cell has not been changed yet
+        for (int i = 0; i < gameStorage.getSize(); i++) {
+            memoryOverview.add(model.getGeneralAiSymbols()[UNCHANGED_FIELD_SYMBOL_INDEX]);
+        }
+        //  Case 4 : Cell has been altered by an AI
+        for (int i = 0; i < memoryOverview.size(); i++) {
+            GameStorageCell currentCell = gameStorage.getCells().get(i);
+            if (!currentCell.getLastChangedBy().isEmpty()) {
+                String symbol = getSymbol(model, currentCell.getLastChangedBy());
+                memoryOverview.set(i, symbol);
+            }
+        }
+        // Case 3 : Cell is an 'AI-Bomb'
+        for (int i = 0; i < memoryOverview.size(); i++) {
+            GameStorageCell currentCell = gameStorage.getCells().get(i);
+            if (!currentCell.getLastChangedBy().isEmpty()) {
+                if (isAiBomb(currentCell)) {
+                    String bombSymbol = getBombSymbol(model, currentCell.getLastChangedBy());
+                    memoryOverview.set(i, bombSymbol);
+                }
+            }
+        }
+        if (!model.getAliveAis().isEmpty()) {
+            // Case 2 : Cell will be executed in current cycle
+            for (int i : getNextCommandIndexOfOtherAis(model)) {
+                memoryOverview.set(i, model.getGeneralAiSymbols()[NEXT_AIS_SYMBOL_INDEX]);
+            }
+            // Case 1 : Cell will be executed in next turn
+            memoryOverview.set(getNextCommandIndexOfNextAi(model), model.getGeneralAiSymbols()[CURRENT_AI_SYMBOL_INDEX]);
+        }
+        return memoryOverview;
     }
 
     private String createDetailedMemory(GameSystem model, CircularArrayList<String> simpleView, String argument) {
