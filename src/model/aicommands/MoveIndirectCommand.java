@@ -6,7 +6,6 @@ import model.GameSystem;
 
 import static model.Constants.BETWEEN_NAME_AND_ID_PLACEHOLDER;
 
-
 /**
  * Represents an AI command to move the contents of one cell to another indirectly specified cell.
  * <p>
@@ -24,13 +23,10 @@ public class MoveIndirectCommand implements AiCommand {
     public void execute(GameSystem model, Ai executingAi) {
         int index = executingAi.getPointerIndex();
         GameStorageCell currentCell = model.getGameStorage().getCells().get(index);
-        if (executingAi.getRoundCounter() == 6) {
-            int bruh = 4;
-        }
         GameStorageCell source = model.getGameStorage().getCells().get(index + (long) currentCell.getEntryA());
         long intermediateIndex = index + (long) currentCell.getEntryB();
         GameStorageCell intermediate = model.getGameStorage().getCells().get(intermediateIndex);
-        long targetIndex = intermediateIndex + intermediate.getEntryB();
+        long targetIndex = intermediateIndex + (long) intermediate.getEntryB();
         model.getGameStorage().getCells().get(targetIndex).setCommand(source.getCommand());
         model.getGameStorage().getCells().get(targetIndex).setEntryA(source.getEntryA());
         model.getGameStorage().getCells().get(targetIndex).setEntryB(source.getEntryB());
